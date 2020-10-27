@@ -1,5 +1,6 @@
 #include <SFML/Graphics.hpp>
 #include <iostream>
+#include <vector>
 
 
 int main() {
@@ -10,7 +11,8 @@ int main() {
 	sf::Vector2u textureSize = Texture.getSize();
 	float x_size = textureSize.x / 32.000000;
 	float y_size = textureSize.y / 32.000000;
-	
+	bool fight = false;
+	bool enamydie = false;
 	// wallx
 	std::vector<sf::RectangleShape> wallx;
 	sf::RectangleShape wall(sf::Vector2f(50.0f, 50.0f));
@@ -121,8 +123,9 @@ int main() {
 			player_posy += 1;
 			printf("position x = %d position y = %d", player_posx, player_posy);
 		}
-		if (player.getGlobalBounds().intersects(enemy.getGlobalBounds())) {
+		if (player.getGlobalBounds().intersects(enemy.getGlobalBounds()) && enamydie == false) {
 			printf("*");
+			fight = true;
 		}
 		/*
 		if (sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
@@ -131,16 +134,23 @@ int main() {
 		}
 		*/
 		window.clear();
-		for (int i = 0; i < wallx.size(); i++)
-		{
+		for (int i = 0; i < wallx.size(); i++){
 			window.draw(wallx[i]);
 		}
-		
-		for (int i = 0; i < wally.size(); i++)
-		{
+		for (int i = 0; i < wally.size(); i++){
 			window.draw(wally[i]);
 		}
-		window.draw(enemy);
+		if (enamydie != true) {
+			window.draw(enemy);
+		}
+		if (fight == true) {
+			for (int i = 0; i < 25000; i++){
+				printf("fighting");
+			}
+			printf("fight done");
+			enamydie = true;
+			fight = false;
+		}
 		window.draw(player);
 		window.display();
 	}
