@@ -1,18 +1,167 @@
 #include <SFML/Graphics.hpp>
 #include <iostream>
 #include <vector>
+#include<stdio.h>
+#include<iostream>
+#include<stdlib.h>
+#include<math.h>
+#include<ctype.h>
+#include<time.h>
+#include <vector>
+#include"card.h"
+using namespace std;
+
+int enemy_card;
+int hero_card;
+int Card[52];
+int enemy_score = 0;
+int hero_score = 0;
+int a, i, x, j, k, c = 0;
+char yes_no;
+bool same;
+int ispim[100];
+std::vector <int> deck;
+
+int pick_card() {
+	srand(time(NULL));
+	a = rand();
+	a = (a % 52) + 1;
+	same = true;
+	while (same == true) {
+		same = false;
+		for (j = 0; j < 51; j++) {
+			if (a == Card[j]) {
+				same = true;
+				a = rand();
+				a = (a % 52) + 1;
+			}
+		}
+	}
+	Card[c] = a;
+	c = c + 1;
+	return (a);
+}
+
+int clear_card() {
+
+	for (j = 0; j < 51; j++) {
+		Card[j] = NULL;
+		return 0;
+	}
+}
+
+int winer(int a, int b) {
+	if (a == b) {
+		printf("draw  ;-; \n");
+		return 0;
+	}
+	if (a > b) {
+		printf("hero is winner  ^^ \n");
+		return 0;
+	}
+	if (a < b) {
+		printf("hero is lose  TT \n");
+		return 0;
+	}
+}
+
+int too_more(int a) {
+	if (a > 21) {
+		return(1);
+	}
+	else {
+		return(0);
+	}
+}
+
+
+int card_score(int a) {
+	if (a <= 13) {
+		if (a >= 10) {
+			return(10);
+		}
+		else {
+			return(a);
+		}
+	}
+	else if (a <= 26) {
+		a = a - 13;
+		if (a >= 10) {
+			return(10);
+		}
+		else {
+			return(a);
+		}
+	}
+	else if (a <= 39) {
+		a = a - 26;
+		if (a >= 10) {
+			return(10);
+		}
+		else {
+			return(a);
+		}
+	}
+	else if (a <= 52) {
+		a = a - 39;
+		if (a >= 10) {
+			return(10);
+		}
+		else {
+			return(a);
+		}
+	}
+}
+
+char card_house(int a) {
+	if (a <= 13) {
+		return('s');
+	}
+	else if (a <= 26) {
+		return('h');
+	}
+	else if (a <= 39) {
+		return('c');
+	}
+	else if (a <= 52) {
+		return('d');
+	}
+}
+
+char card_type(int a) {
+	if (a == 11 || a == 24 || a == 37 || a == 50) {
+		return('J');
+	}
+	else if (a == 12 || a == 25 || a == 38 || a == 51) {
+		return('Q');
+	}
+	else if (a == 13 || a == 26 || a == 39 || a == 52) {
+		return('K');
+	}
+	else {
+		return(' ');
+	}
+}
+
 
 
 int main() {
-
-	sf::RenderWindow window(sf::VideoMode(500, 500), "test", sf::Style::Close | sf::Style::Resize);
+	sf::RenderWindow window(sf::VideoMode(500, 500), "test", sf::Style::Close | sf::Style::Resize );
+	//std::vector<card> deck;
+	//card tc(&dkj);
+	//tc.info.point
+	//deck.push_back(tc);
+	//for (card& Card : deck) Card.draw(window);
 	sf::Texture Texture;
 	Texture.loadFromFile("new2.png");
 	sf::Vector2u textureSize = Texture.getSize();
 	float x_size = textureSize.x / 32.000000;
 	float y_size = textureSize.y / 32.000000;
 	bool fight = false;
-	bool enamydie = false;
+	bool enemydie = false;
+	// card
+	std::vector<card> deck;
+	//card tc(&dkj);
 	// wallx
 	std::vector<sf::RectangleShape> wallx;
 	sf::RectangleShape wall(sf::Vector2f(50.0f, 50.0f));
@@ -63,7 +212,7 @@ int main() {
 	player.setOrigin(0.f, 0.f);
 	player.setPosition(50.0f, 50.0f);
 	player.setTexture(&Texture);
-	player.setTextureRect(sf::IntRect(x_size * 31, y_size * 0, x_size, y_size));
+	player.setTextureRect(sf::IntRect(x_size * 25, y_size * 0, x_size, y_size));
 	// position
 	int player_posx = 1;
 	int player_posy = 1;
@@ -74,7 +223,7 @@ int main() {
 	enemy.setOrigin(0.f, 0.f);
 	enemy.setPosition(250.0f, 300.0f);
 	enemy.setTexture(&Texture);
-	enemy.setTextureRect(sf::IntRect(x_size * 28, y_size * 5, x_size, y_size));
+	enemy.setTextureRect(sf::IntRect(x_size * 29, y_size * 8, x_size, y_size));
 	// position
 	int enemy_posx = 5;
 	int enemy_posy = 6;
@@ -123,8 +272,7 @@ int main() {
 			player_posy += 1;
 			printf("position x = %d position y = %d", player_posx, player_posy);
 		}
-		if (player.getGlobalBounds().intersects(enemy.getGlobalBounds()) && enamydie == false) {
-			printf("*");
+		if (player.getGlobalBounds().intersects(enemy.getGlobalBounds()) && enemydie == false) {
 			fight = true;
 		}
 		/*
@@ -140,15 +288,41 @@ int main() {
 		for (int i = 0; i < wally.size(); i++){
 			window.draw(wally[i]);
 		}
-		if (enamydie != true) {
+		if (enemydie != true) {
 			window.draw(enemy);
 		}
 		if (fight == true) {
-			for (int i = 0; i < 25000; i++){
-				printf("fighting");
+			while (fight == true) {
+				if (ispim[2] == 0) {
+					hero_card = pick_card();
+					enemy_card = pick_card();
+					hero_score += card_score(hero_card);
+					enemy_score += card_score(enemy_card);
+					ispim[2] = 1;
+				}
+				if (ispim[0] == 0) {
+					printf_s("\nhero is %d %c ", card_score(hero_card), card_house(hero_card));
+					ispim[0] = 1;
+				}
+				//printf_s("enemy is %d %c", card_score(enemy_card), card_house(enemy_card));
+				if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Z)) {
+					hero_card = pick_card();
+					enemy_card = pick_card();
+					hero_score += card_score(hero_card);
+					enemy_score += card_score(hero_card);
+					printf_s("\nhero draw is %d %c", card_score(hero_card), card_house(hero_card));
+					printf_s("\nhero is  score is %d", hero_score);
+					while(sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Z)){
+					}
+				}
+				else if(sf::Keyboard::isKeyPressed(sf::Keyboard::Key::X)) {
+					break;
+				}
 			}
-			printf("fight done");
-			enamydie = true;
+			printf_s("\nhero is %d",hero_score);
+			printf_s("\nenemy is %d",enemy_score);
+			printf("\n fight done");
+			enemydie = true;
 			fight = false;
 		}
 		window.draw(player);

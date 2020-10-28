@@ -1,18 +1,18 @@
 #pragma once
 #include <iostream>
-class card{
+#include <SFML/Graphics.hpp>
+class card {
 private:
-	int enamy_card;
-	int hero_card;
-	int card[52];
-	int enamy_score = 0;
-	int hero_score = 0;
-	int a, i, x, j, k, c = 0;
-	char yes_no;
-	bool same;
-
+	sf::RectangleShape body;
 public:
-	int winer;
-	int pick_card();
+	struct cardinfo {
+		int point;
+		char sym;
+	}info;
+	card(sf::Texture& texure);
+	void draw(sf::RenderWindow &window);
+	
 };
+
+
 
