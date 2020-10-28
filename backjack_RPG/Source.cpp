@@ -20,7 +20,14 @@ int a, i, x, j, k, c = 0;
 char yes_no;
 bool same;
 int ispim[100];
-std::vector <int> deck;
+bool fight = false;
+bool enemydie = false;
+int walk;
+std::vector <int> Deck;
+std::vector <int> hand_hero;
+std::vector <int> hand_enemy;
+
+
 
 int pick_card() {
 	srand(time(NULL));
@@ -41,13 +48,19 @@ int pick_card() {
 	c = c + 1;
 	return (a);
 }
+int Shuffle() {
+	for (int kk = 0;  kk < 52; kk++){
+		Deck.push_back(pick_card());
+	}
+	return 0;
+}
 
 int clear_card() {
-
 	for (j = 0; j < 51; j++) {
 		Card[j] = NULL;
-		return 0;
 	}
+	while (not Deck.empty()) Deck.pop_back();
+	return 0;
 }
 
 int winer(int a, int b) {
@@ -57,6 +70,7 @@ int winer(int a, int b) {
 	}
 	if (a > b) {
 		printf("hero is winner  ^^ \n");
+		enemydie = true;
 		return 0;
 	}
 	if (a < b) {
@@ -157,8 +171,6 @@ int main() {
 	sf::Vector2u textureSize = Texture.getSize();
 	float x_size = textureSize.x / 32.000000;
 	float y_size = textureSize.y / 32.000000;
-	bool fight = false;
-	bool enemydie = false;
 	// card
 	std::vector<card> deck;
 	//card tc(&dkj);
@@ -246,31 +258,35 @@ int main() {
 		}
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::A)  && player_posx!=1 ) {
 			player.move(-50.f,0.f);
+			walk = 1;
 			while (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::A)) {
 			}
 			player_posx -= 1;
-			printf("position x = %d position y = %d",player_posx,player_posy);
+			//printf("position x = %d position y = %d",player_posx,player_posy);
 		}
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::D) && player_posx != 8 ) {
 			player.move(50.f, 0.0f);
+			walk = 2;
 			while (sf::Keyboard::isKeyPressed(sf::Keyboard::D)) {
 			}
 			player_posx += 1;
-			printf("position x = %d position y = %d", player_posx, player_posy);
+			//printf("position x = %d position y = %d", player_posx, player_posy);
 		}
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::W) && player_posy != 1) {
 			player.move(0.0f, -50.f);
+			walk = 3;
 			while (sf::Keyboard::isKeyPressed(sf::Keyboard::W)) {
 			}
 			player_posy -= 1;
-			printf("position x = %d position y = %d", player_posx, player_posy);
+			//printf("position x = %d position y = %d", player_posx, player_posy);
 		}
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::S) && player_posy != 8) {
 			player.move(0.0f, 50.f);
+			walk = 4;
 			while (sf::Keyboard::isKeyPressed(sf::Keyboard::S)) {
 			}
 			player_posy += 1;
-			printf("position x = %d position y = %d", player_posx, player_posy);
+			//printf("position x = %d position y = %d", player_posx, player_posy);
 		}
 		if (player.getGlobalBounds().intersects(enemy.getGlobalBounds()) && enemydie == false) {
 			fight = true;
@@ -292,38 +308,91 @@ int main() {
 			window.draw(enemy);
 		}
 		if (fight == true) {
+		Shuffle();
 			while (fight == true) {
-				if (ispim[2] == 0) {
-					hero_card = pick_card();
-					enemy_card = pick_card();
-					hero_score += card_score(hero_card);
-					enemy_score += card_score(enemy_card);
-					ispim[2] = 1;
+				for (int i = 0; i < Deck.size(); i++) {
+					printf("\n%d ", Deck[i]);
 				}
-				if (ispim[0] == 0) {
-					printf_s("\nhero is %d %c ", card_score(hero_card), card_house(hero_card));
-					ispim[0] = 1;
+				hand_hero.push_back(Deck.back());
+				hero_score += card_score(Deck.back());
+				Deck.pop_back();
+				hand_enemy.push_back(Deck.back());
+				enemy_score += card_score(Deck.back());
+				Deck.pop_back();
+				hand_hero.push_back(Deck.back());
+				hero_score += card_score(Deck.back());
+				Deck.pop_back();
+				hand_enemy.push_back(Deck.back());
+				enemy_score += card_score(Deck.back());
+				Deck.pop_back();
+				printf("\nhand hero\n");
+				for (int i = 0; i < hand_hero.size(); i++) {
+					printf(" %d", hand_hero[i]);
 				}
-				//printf_s("enemy is %d %c", card_score(enemy_card), card_house(enemy_card));
-				if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Z)) {
-					hero_card = pick_card();
-					enemy_card = pick_card();
-					hero_score += card_score(hero_card);
-					enemy_score += card_score(hero_card);
-					printf_s("\nhero draw is %d %c", card_score(hero_card), card_house(hero_card));
-					printf_s("\nhero is  score is %d", hero_score);
-					while(sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Z)){
+				printf("hero score");
+				printf("%d", hero_score);
+				while (1) {
+					if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Z)) {
+						hand_hero.push_back(Deck.back());
+						hero_score += card_score(Deck.back());
+						Deck.pop_back();
+						if (too_more(hero_score) == 1) {
+							printf_s("\nhero is %d", hero_score);
+							printf_s("\nenemy is %d\n", enemy_score);
+							printf("hero is lose  TT \n");
+							if (walk == 1) {
+								player.move(50.f, 0.f);
+								player_posx += 1;
+							}
+							else if (walk == 2) {
+								player.move(-50.f, 0.0f);
+								player_posx -= 1;
+							}
+							else if (walk == 3) {
+								player.move(0.0f, 50.f);
+								player_posy += 1;
+							}
+							else if (walk == 4) {
+								player.move(0.0f, -50.f);
+								player_posy -= 1;
+							}
+							break;
+						}
+						hand_enemy.push_back(Deck.back());
+						enemy_score += card_score(Deck.back());
+						Deck.pop_back();
+						if (too_more(enemy_score) == 1) {
+							printf_s("\nhero is %d", hero_score);
+							printf_s("\nenemy is %d\n", enemy_score);
+							printf("hero is winner  ^^ \n");
+							enemydie = true;
+							break;
+						}
+						printf("\nhand hero\n");
+						for (int i = 0; i < hand_hero.size(); i++) {
+							printf(" %d", hand_hero[i]);
+						}
+						printf("hero score");
+						printf("%d", hero_score);
+						while (sf::Keyboard::isKeyPressed(sf::Keyboard::Z)) {}
+					}
+					if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::X)) {
+						fight = false;
+						printf_s("\nhero is %d",hero_score);
+						printf_s("\nenemy is %d\n",enemy_score);
+						winer(hero_score, enemy_score);
+						break;
+						while (sf::Keyboard::isKeyPressed(sf::Keyboard::X)) {
+						}
 					}
 				}
-				else if(sf::Keyboard::isKeyPressed(sf::Keyboard::Key::X)) {
-					break;
-				}
+				clear_card();
+				enemy_score = 0;
+				hero_score = 0;
+				while (not hand_hero.empty()) hand_hero.pop_back();
+				while (not hand_enemy.empty()) hand_enemy.pop_back();
+				fight = false;
 			}
-			printf_s("\nhero is %d",hero_score);
-			printf_s("\nenemy is %d",enemy_score);
-			printf("\n fight done");
-			enemydie = true;
-			fight = false;
 		}
 		window.draw(player);
 		window.display();

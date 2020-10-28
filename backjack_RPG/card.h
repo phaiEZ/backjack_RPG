@@ -13,6 +13,3 @@ public:
 	void draw(sf::RenderWindow &window);
 	
 };
-
-
-
