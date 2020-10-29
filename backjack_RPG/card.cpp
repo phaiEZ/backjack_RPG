@@ -4,8 +4,7 @@
 
 
 
-card::card(sf::Texture &texure)
-{
+card::card(sf::Texture &texure){
 	body.setTexture(&texure);
 }
 

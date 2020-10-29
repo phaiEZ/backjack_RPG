@@ -161,7 +161,6 @@ char card_type(int a) {
 
 int main() {
 	sf::RenderWindow window(sf::VideoMode(500, 500), "test", sf::Style::Close | sf::Style::Resize );
-	//std::vector<card> deck;
 	//card tc(&dkj);
 	//tc.info.point
 	//deck.push_back(tc);
@@ -172,7 +171,6 @@ int main() {
 	float x_size = textureSize.x / 32.000000;
 	float y_size = textureSize.y / 32.000000;
 	// card
-	std::vector<card> deck;
 	//card tc(&dkj);
 	// wallx
 	std::vector<sf::RectangleShape> wallx;
