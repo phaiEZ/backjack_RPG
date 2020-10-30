@@ -161,6 +161,7 @@ char card_type(int a) {
 
 int main() {
 	sf::RenderWindow window(sf::VideoMode(500, 500), "test", sf::Style::Close | sf::Style::Resize );
+	window.setFramerateLimit(60);
 	//card tc(&dkj);
 	//tc.info.point
 	//deck.push_back(tc);
@@ -172,32 +173,56 @@ int main() {
 	float y_size = textureSize.y / 32.000000;
 	// card
 	//card tc(&dkj);
+
+	int wall_location[10][100] =
+		//1
+	{ { 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+		1, 0, 0, 0, 0, 0, 0, 0, 0, 1,
+		1, 0, 0, 0, 0, 0, 0, 0, 0, 1,
+		1, 0, 0, 0, 0, 0, 0, 0, 0, 1,
+		1, 0, 0, 0, 0, 0, 0, 0, 0, 1,
+		1, 0, 0, 0, 0, 0, 0, 0, 0, 1,
+		1, 0, 0, 0, 0, 0, 0, 0, 0, 1,
+		1, 0, 0, 0, 0, 0, 0, 0, 0, 1,
+		1, 0, 0, 0, 0, 0, 0, 0, 0, 1,
+		1, 1, 1, 1, 1, 1, 1, 1, 1, 1 },
+		//2
+	{   1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+		1, 0, 0, 0, 0, 0, 0, 0, 0, 1,
+		1, 0, 0, 0, 0, 0, 0, 0, 0, 1,
+		1, 0, 0, 0, 0, 0, 0, 0, 0, 1,
+		1, 0, 0, 0, 0, 0, 0, 0, 0, 1,
+		1, 0, 0, 0, 0, 0, 0, 0, 0, 1,
+		1, 0, 0, 0, 0, 0, 0, 0, 0, 1,
+		1, 0, 0, 0, 0, 0, 0, 0, 0, 1,
+		1, 0, 0, 0, 0, 0, 0, 0, 0, 1,
+		1, 1, 1, 1, 1, 1, 1, 1, 1, 1 }
+};
+
 	// wallx
-	std::vector<sf::RectangleShape> wallx;
+	
+	std::vector<sf::RectangleShape> Wall;
 	sf::RectangleShape wall(sf::Vector2f(50.0f, 50.0f));
 	for (int i = 1; i <= 20; i++)
 	{
 		float x = i*50;
 		if (i <= 10) {
-			wall.setPosition(x, 0.0f);
+			wall.setPosition(x - 50,0.0f);
 			wall.setTexture(&Texture);
 			wall.setTextureRect(sf::IntRect(x_size * 23.00000, y_size * 3.00000, x_size, y_size));
 			wall.setRotation(0.f);
-			wall.rotate(90.f);
-			wallx.push_back(wall);
+			Wall.push_back(wall);
 		}
 		else {
 			x -= 500;
-			wall.setPosition(x, 450.f);
+			wall.setPosition(x-50, 450.f);
 			wall.setTexture(&Texture);
 			wall.setTextureRect(sf::IntRect(x_size * 23.00000, y_size * 3.00000, x_size, y_size));
 			wall.setRotation(0.f);
-			wall.rotate(90.f);
-			wallx.push_back(wall);
+			Wall.push_back(wall);
 		}
 	}
 	// wally
-	std::vector<sf::RectangleShape> wally;
 	//sf::RectangleShape wall(sf::Vector2f(50.0f, 50.0f));
 	for (int i = 1; i <= 16; i++){
 		float x = i * 50;
@@ -206,7 +231,7 @@ int main() {
 			wall.setTexture(&Texture);
 			wall.setTextureRect(sf::IntRect(x_size * 23.00000, y_size * 3.00000, x_size, y_size));
 			wall.setRotation(0.f);
-			wally.push_back(wall);
+			Wall.push_back(wall);
 		}
 		else {
 			x -=  400;
@@ -214,9 +239,14 @@ int main() {
 			wall.setTexture(&Texture);
 			wall.setTextureRect(sf::IntRect(x_size * 23.00000, y_size * 3.00000, x_size, y_size));
 			wall.setRotation(0.f);
-			wally.push_back(wall);
+			Wall.push_back(wall);
 		}
 	}
+	
+
+
+
+
 	//player
 	sf::RectangleShape player(sf::Vector2f(50.0f, 50.0f));
 	player.setOrigin(0.f, 0.f);
@@ -254,7 +284,7 @@ int main() {
 				}
 			}
 		}
-		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::A)  && player_posx!=1 ) {
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::A)) {
 			player.move(-50.f,0.f);
 			walk = 1;
 			while (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::A)) {
@@ -262,7 +292,7 @@ int main() {
 			player_posx -= 1;
 			//printf("position x = %d position y = %d",player_posx,player_posy);
 		}
-		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::D) && player_posx != 8 ) {
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::D) ) {
 			player.move(50.f, 0.0f);
 			walk = 2;
 			while (sf::Keyboard::isKeyPressed(sf::Keyboard::D)) {
@@ -270,7 +300,7 @@ int main() {
 			player_posx += 1;
 			//printf("position x = %d position y = %d", player_posx, player_posy);
 		}
-		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::W) && player_posy != 1) {
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::W) ) {
 			player.move(0.0f, -50.f);
 			walk = 3;
 			while (sf::Keyboard::isKeyPressed(sf::Keyboard::W)) {
@@ -278,7 +308,7 @@ int main() {
 			player_posy -= 1;
 			//printf("position x = %d position y = %d", player_posx, player_posy);
 		}
-		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::S) && player_posy != 8) {
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::S)) {
 			player.move(0.0f, 50.f);
 			walk = 4;
 			while (sf::Keyboard::isKeyPressed(sf::Keyboard::S)) {
@@ -289,19 +319,42 @@ int main() {
 		if (player.getGlobalBounds().intersects(enemy.getGlobalBounds()) && enemydie == false) {
 			fight = true;
 		}
+		for (int i = 0; i < Wall.size(); i++) {
+			if (player.getGlobalBounds().intersects(Wall[i].getGlobalBounds()) ) {
+				if (walk == 1) {
+					player.move(50.f, 0.f);
+					player_posx += 1;
+				}
+				else if (walk == 2) {
+					player.move(-50.f, 0.0f);
+					player_posx -= 1;
+				}
+				else if (walk == 3) {
+					player.move(0.0f, 50.f);
+					player_posy += 1;
+				}
+				else if (walk == 4) {
+					player.move(0.0f, -50.f);
+					player_posy -= 1;
+				}
+			}
+		}
+		
 		/*
 		if (sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
 			sf::Vector2i mousePos = sf::Mouse::getPosition(window);
 			player.setPosition((float)mousePos.x, (float)mousePos.y);
 		}
 		*/
+
 		window.clear();
-		for (int i = 0; i < wallx.size(); i++){
-			window.draw(wallx[i]);
+
+		
+		for (int i = 0; i < Wall.size(); i++){
+			window.draw(Wall[i]);
 		}
-		for (int i = 0; i < wally.size(); i++){
-			window.draw(wally[i]);
-		}
+		
+
 		if (enemydie != true) {
 			window.draw(enemy);
 		}
@@ -380,8 +433,7 @@ int main() {
 						printf_s("\nenemy is %d\n",enemy_score);
 						winer(hero_score, enemy_score);
 						break;
-						while (sf::Keyboard::isKeyPressed(sf::Keyboard::X)) {
-						}
+						while (sf::Keyboard::isKeyPressed(sf::Keyboard::X)) {}
 					}
 				}
 				clear_card();
