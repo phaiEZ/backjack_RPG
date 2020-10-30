@@ -188,19 +188,39 @@ int main() {
 		1, 1, 1, 1, 1, 1, 1, 1, 1, 1 },
 		//2
 	{   1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
-		1, 0, 0, 0, 0, 0, 0, 0, 0, 1,
-		1, 0, 0, 0, 0, 0, 0, 0, 0, 1,
-		1, 0, 0, 0, 0, 0, 0, 0, 0, 1,
-		1, 0, 0, 0, 0, 0, 0, 0, 0, 1,
-		1, 0, 0, 0, 0, 0, 0, 0, 0, 1,
-		1, 0, 0, 0, 0, 0, 0, 0, 0, 1,
-		1, 0, 0, 0, 0, 0, 0, 0, 0, 1,
-		1, 0, 0, 0, 0, 0, 0, 0, 0, 1,
+		1, 0, 1, 0, 0, 0, 1, 0, 0, 1,
+		1, 0, 1, 0, 1, 0, 1, 0, 0, 1,
+		1, 0, 1, 0, 1, 0, 1, 0, 0, 1,
+		1, 0, 1, 0, 1, 0, 1, 0, 0, 1,
+		1, 0, 1, 0, 1, 0, 1, 0, 0, 1,
+		1, 0, 1, 0, 1, 0, 1, 0, 0, 1,
+		1, 0, 1, 0, 1, 0, 1, 0, 0, 1,
+		1, 0, 0, 0, 1, 0, 0, 0, 0, 1,
 		1, 1, 1, 1, 1, 1, 1, 1, 1, 1 }
 };
 
+	std::vector<sf::RectangleShape> Wall;
+	sf::RectangleShape wall(sf::Vector2f(50.0f, 50.0f));
+	int row = 0;
+	int row_count = 0;
+	for (int i = 0; i <= 99; i++) {
+		if (row_count == 10) {
+			printf("*");
+			row_count = 0;
+			row += 1;
+		}
+		if (wall_location[1][i] == 1) {
+			wall.setPosition(50*row_count, row*50);
+			wall.setTexture(&Texture);
+			wall.setTextureRect(sf::IntRect(x_size * 23.00000, y_size * 3.00000, x_size, y_size));
+			wall.setRotation(0.f);
+			Wall.push_back(wall);
+		}
+		printf("%d", wall_location[1][i]);
+		row_count += 1;
+	}
 	// wallx
-	
+	/*
 	std::vector<sf::RectangleShape> Wall;
 	sf::RectangleShape wall(sf::Vector2f(50.0f, 50.0f));
 	for (int i = 1; i <= 20; i++)
@@ -244,7 +264,7 @@ int main() {
 	}
 	
 
-
+	*/
 
 
 	//player
@@ -292,7 +312,7 @@ int main() {
 			player_posx -= 1;
 			//printf("position x = %d position y = %d",player_posx,player_posy);
 		}
-		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::D) ) {
+		else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::D) ) {
 			player.move(50.f, 0.0f);
 			walk = 2;
 			while (sf::Keyboard::isKeyPressed(sf::Keyboard::D)) {
@@ -300,7 +320,7 @@ int main() {
 			player_posx += 1;
 			//printf("position x = %d position y = %d", player_posx, player_posy);
 		}
-		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::W) ) {
+		else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::W) ) {
 			player.move(0.0f, -50.f);
 			walk = 3;
 			while (sf::Keyboard::isKeyPressed(sf::Keyboard::W)) {
@@ -308,7 +328,7 @@ int main() {
 			player_posy -= 1;
 			//printf("position x = %d position y = %d", player_posx, player_posy);
 		}
-		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::S)) {
+		else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::S)) {
 			player.move(0.0f, 50.f);
 			walk = 4;
 			while (sf::Keyboard::isKeyPressed(sf::Keyboard::S)) {
@@ -444,6 +464,8 @@ int main() {
 				fight = false;
 			}
 		}
+
+
 		window.draw(player);
 		window.display();
 	}
