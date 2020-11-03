@@ -27,7 +27,7 @@ std::vector <int> Deck;
 std::vector <int> hand_hero;
 std::vector <int> hand_enemy;
 
-
+int level_map =0;
 
 int pick_card() {
 	srand(time(NULL));
@@ -49,7 +49,7 @@ int pick_card() {
 	return (a);
 }
 int Shuffle() {
-	for (int kk = 0;  kk < 52; kk++){
+	for (int kk = 0; kk < 52; kk++) {
 		Deck.push_back(pick_card());
 	}
 	return 0;
@@ -160,7 +160,7 @@ char card_type(int a) {
 
 
 int main() {
-	sf::RenderWindow window(sf::VideoMode(500, 500), "test", sf::Style::Close | sf::Style::Resize );
+	sf::RenderWindow window(sf::VideoMode(500, 500), "test", sf::Style::Close | sf::Style::Resize);
 	window.setFramerateLimit(60);
 	//card tc(&dkj);
 	//tc.info.point
@@ -197,74 +197,11 @@ int main() {
 		1, 0, 1, 0, 1, 0, 1, 0, 0, 1,
 		1, 0, 0, 0, 1, 0, 0, 0, 0, 1,
 		1, 1, 1, 1, 1, 1, 1, 1, 1, 1 }
-};
+	};
 
 	std::vector<sf::RectangleShape> Wall;
 	sf::RectangleShape wall(sf::Vector2f(50.0f, 50.0f));
-	int row = 0;
-	int row_count = 0;
-	for (int i = 0; i <= 99; i++) {
-		if (row_count == 10) {
-			printf("*");
-			row_count = 0;
-			row += 1;
-		}
-		if (wall_location[1][i] == 1) {
-			wall.setPosition(50*row_count, row*50);
-			wall.setTexture(&Texture);
-			wall.setTextureRect(sf::IntRect(x_size * 23.00000, y_size * 3.00000, x_size, y_size));
-			wall.setRotation(0.f);
-			Wall.push_back(wall);
-		}
-		printf("%d", wall_location[1][i]);
-		row_count += 1;
-	}
-	// wallx
-	/*
-	std::vector<sf::RectangleShape> Wall;
-	sf::RectangleShape wall(sf::Vector2f(50.0f, 50.0f));
-	for (int i = 1; i <= 20; i++)
-	{
-		float x = i*50;
-		if (i <= 10) {
-			wall.setPosition(x - 50,0.0f);
-			wall.setTexture(&Texture);
-			wall.setTextureRect(sf::IntRect(x_size * 23.00000, y_size * 3.00000, x_size, y_size));
-			wall.setRotation(0.f);
-			Wall.push_back(wall);
-		}
-		else {
-			x -= 500;
-			wall.setPosition(x-50, 450.f);
-			wall.setTexture(&Texture);
-			wall.setTextureRect(sf::IntRect(x_size * 23.00000, y_size * 3.00000, x_size, y_size));
-			wall.setRotation(0.f);
-			Wall.push_back(wall);
-		}
-	}
-	// wally
-	//sf::RectangleShape wall(sf::Vector2f(50.0f, 50.0f));
-	for (int i = 1; i <= 16; i++){
-		float x = i * 50;
-		if (i <= 8) {
-			wall.setPosition(0.0f, x);
-			wall.setTexture(&Texture);
-			wall.setTextureRect(sf::IntRect(x_size * 23.00000, y_size * 3.00000, x_size, y_size));
-			wall.setRotation(0.f);
-			Wall.push_back(wall);
-		}
-		else {
-			x -=  400;
-			wall.setPosition(450.0f, x);
-			wall.setTexture(&Texture);
-			wall.setTextureRect(sf::IntRect(x_size * 23.00000, y_size * 3.00000, x_size, y_size));
-			wall.setRotation(0.f);
-			Wall.push_back(wall);
-		}
-	}
 	
-
-	*/
 
 
 	//player
@@ -289,6 +226,25 @@ int main() {
 	int enemy_posy = 6;
 
 	while (window.isOpen()) {
+		int row = 0;
+		int row_count = 0;
+		for (int i = 0; i <= 99; i++) {
+			if (row_count == 10) {
+				//printf("*");
+				row_count = 0;
+				row += 1;
+			}
+			if (wall_location[level_map][i] == 1) {
+				wall.setPosition(50 * row_count, row * 50);
+				wall.setTexture(&Texture);
+				wall.setTextureRect(sf::IntRect(x_size * 23.00000, y_size * 3.00000, x_size, y_size));
+				wall.setRotation(0.f);
+				Wall.push_back(wall);
+			}
+			row_count += 1;
+		}
+
+
 		sf::Event evnt;
 		while (window.pollEvent(evnt)) {
 			switch (evnt.type) {
@@ -305,14 +261,14 @@ int main() {
 			}
 		}
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::A)) {
-			player.move(-50.f,0.f);
+			player.move(-50.f, 0.f);
 			walk = 1;
 			while (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::A)) {
 			}
 			player_posx -= 1;
 			//printf("position x = %d position y = %d",player_posx,player_posy);
 		}
-		else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::D) ) {
+		else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::D)) {
 			player.move(50.f, 0.0f);
 			walk = 2;
 			while (sf::Keyboard::isKeyPressed(sf::Keyboard::D)) {
@@ -320,7 +276,7 @@ int main() {
 			player_posx += 1;
 			//printf("position x = %d position y = %d", player_posx, player_posy);
 		}
-		else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::W) ) {
+		else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::W)) {
 			player.move(0.0f, -50.f);
 			walk = 3;
 			while (sf::Keyboard::isKeyPressed(sf::Keyboard::W)) {
@@ -340,7 +296,7 @@ int main() {
 			fight = true;
 		}
 		for (int i = 0; i < Wall.size(); i++) {
-			if (player.getGlobalBounds().intersects(Wall[i].getGlobalBounds()) ) {
+			if (player.getGlobalBounds().intersects(Wall[i].getGlobalBounds())) {
 				if (walk == 1) {
 					player.move(50.f, 0.f);
 					player_posx += 1;
@@ -359,7 +315,7 @@ int main() {
 				}
 			}
 		}
-		
+
 		/*
 		if (sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
 			sf::Vector2i mousePos = sf::Mouse::getPosition(window);
@@ -369,17 +325,17 @@ int main() {
 
 		window.clear();
 
-		
-		for (int i = 0; i < Wall.size(); i++){
+
+		for (int i = 0; i < Wall.size(); i++) {
 			window.draw(Wall[i]);
 		}
-		
+
 
 		if (enemydie != true) {
 			window.draw(enemy);
 		}
 		if (fight == true) {
-		Shuffle();
+			Shuffle();
 			while (fight == true) {
 				for (int i = 0; i < Deck.size(); i++) {
 					printf("\n%d ", Deck[i]);
@@ -449,8 +405,8 @@ int main() {
 					}
 					if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::X)) {
 						fight = false;
-						printf_s("\nhero is %d",hero_score);
-						printf_s("\nenemy is %d\n",enemy_score);
+						printf_s("\nhero is %d", hero_score);
+						printf_s("\nenemy is %d\n", enemy_score);
 						winer(hero_score, enemy_score);
 						break;
 						while (sf::Keyboard::isKeyPressed(sf::Keyboard::X)) {}
@@ -462,6 +418,8 @@ int main() {
 				while (not hand_hero.empty()) hand_hero.pop_back();
 				while (not hand_enemy.empty()) hand_enemy.pop_back();
 				fight = false;
+				level_map++;
+				player.setPosition(50.0f, 50.0f);
 			}
 		}
 
