@@ -9,6 +9,7 @@
 #include<time.h>
 #include <vector>
 #include"card.h"
+#include "enemy.h"
 using namespace std;
 
 int enemy_card;
@@ -26,8 +27,9 @@ int walk;
 std::vector <int> Deck;
 std::vector <int> hand_hero;
 std::vector <int> hand_enemy;
-
+int enemynum;
 int level_map =0;
+std::vector <enemy> Enemyvec;
 
 int pick_card() {
 	srand(time(NULL));
@@ -70,7 +72,7 @@ int winer(int a, int b) {
 	}
 	if (a > b) {
 		printf("hero is winner  ^^ \n");
-		enemydie = true;
+		Enemyvec[enemynum].takedamage();
 		return 0;
 	}
 	if (a < b) {
@@ -204,6 +206,7 @@ int main() {
 	
 
 
+
 	//player
 	sf::RectangleShape player(sf::Vector2f(50.0f, 50.0f));
 	player.setOrigin(0.f, 0.f);
@@ -216,16 +219,14 @@ int main() {
 
 
 	//enemy
-	sf::RectangleShape enemy(sf::Vector2f(50.0f, 50.0f));
-	enemy.setOrigin(0.f, 0.f);
-	enemy.setPosition(250.0f, 300.0f);
-	enemy.setTexture(&Texture);
-	enemy.setTextureRect(sf::IntRect(x_size * 29, y_size * 8, x_size, y_size));
-	// position
-	int enemy_posx = 5;
-	int enemy_posy = 6;
+	enemy e(&Texture,1, 3 ,100,100);
+	e.Enemy.setTexture(&Texture);
+	Enemyvec.push_back(e);
+
 
 	while (window.isOpen()) {
+
+
 		int row = 0;
 		int row_count = 0;
 		for (int i = 0; i <= 99; i++) {
@@ -292,9 +293,29 @@ int main() {
 			player_posy += 1;
 			//printf("position x = %d position y = %d", player_posx, player_posy);
 		}
-		if (player.getGlobalBounds().intersects(enemy.getGlobalBounds()) && enemydie == false) {
-			fight = true;
+		for (int i = 0; i < Enemyvec.size(); i++) {
+			if (player.getGlobalBounds().intersects(Enemyvec[i].Enemy.getGlobalBounds()) && (Enemyvec[i].GetHp()) > 0) {
+				if (walk == 1) {
+					player.move(50.f, 0.f);
+					player_posx += 1;
+				}
+				else if (walk == 2) {
+					player.move(-50.f, 0.0f);
+					player_posx -= 1;
+				}
+				else if (walk == 3) {
+					player.move(0.0f, 50.f);
+					player_posy += 1;
+				}
+				else if (walk == 4) {
+					player.move(0.0f, -50.f);
+					player_posy -= 1;
+				}
+				fight = true;
+				enemynum = i;
+			}
 		}
+		
 		for (int i = 0; i < Wall.size(); i++) {
 			if (player.getGlobalBounds().intersects(Wall[i].getGlobalBounds())) {
 				if (walk == 1) {
@@ -329,10 +350,11 @@ int main() {
 		for (int i = 0; i < Wall.size(); i++) {
 			window.draw(Wall[i]);
 		}
-
-
-		if (enemydie != true) {
-			window.draw(enemy);
+		for (int i = 0; i < Enemyvec.size(); i++) {
+			if ((Enemyvec[i].GetHp()) > 0) {
+				Enemyvec[i].draw(window);
+			}
+			
 		}
 		if (fight == true) {
 			Shuffle();
@@ -367,22 +389,6 @@ int main() {
 							printf_s("\nhero is %d", hero_score);
 							printf_s("\nenemy is %d\n", enemy_score);
 							printf("hero is lose  TT \n");
-							if (walk == 1) {
-								player.move(50.f, 0.f);
-								player_posx += 1;
-							}
-							else if (walk == 2) {
-								player.move(-50.f, 0.0f);
-								player_posx -= 1;
-							}
-							else if (walk == 3) {
-								player.move(0.0f, 50.f);
-								player_posy += 1;
-							}
-							else if (walk == 4) {
-								player.move(0.0f, -50.f);
-								player_posy -= 1;
-							}
 							break;
 						}
 						hand_enemy.push_back(Deck.back());
@@ -392,7 +398,7 @@ int main() {
 							printf_s("\nhero is %d", hero_score);
 							printf_s("\nenemy is %d\n", enemy_score);
 							printf("hero is winner  ^^ \n");
-							enemydie = true;
+							Enemyvec[enemynum].takedamage();
 							break;
 						}
 						printf("\nhand hero\n");
@@ -409,6 +415,8 @@ int main() {
 						printf_s("\nenemy is %d\n", enemy_score);
 						winer(hero_score, enemy_score);
 						break;
+
+
 						while (sf::Keyboard::isKeyPressed(sf::Keyboard::X)) {}
 					}
 				}
@@ -418,8 +426,6 @@ int main() {
 				while (not hand_hero.empty()) hand_hero.pop_back();
 				while (not hand_enemy.empty()) hand_enemy.pop_back();
 				fight = false;
-				level_map++;
-				player.setPosition(50.0f, 50.0f);
 			}
 		}
 
