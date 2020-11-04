@@ -38,8 +38,8 @@ int pick_card() {
 	same = true;
 	while (same == true) {
 		same = false;
-		for (j = 0; j < 51; j++) {
-			if (a == Card[j]) {
+		for (int jk = 0; jk <= 51; jk++) {
+			if (a == Card[jk]) {
 				same = true;
 				a = rand();
 				a = (a % 52) + 1;
@@ -51,15 +51,16 @@ int pick_card() {
 	return (a);
 }
 int Shuffle() {
-	for (int kk = 0; kk < 52; kk++) {
+	c = 0;
+	for (int kk = 0; kk <= 51; kk++) {
 		Deck.push_back(pick_card());
 	}
 	return 0;
 }
 
 int clear_card() {
-	for (j = 0; j < 51; j++) {
-		Card[j] = NULL;
+	for (int jj = 0; jj <= 51; jj++) {
+		Card[jj] = -1;
 	}
 	while (not Deck.empty()) Deck.pop_back();
 	return 0;
@@ -162,7 +163,7 @@ char card_type(int a) {
 
 
 int main() {
-	sf::RenderWindow window(sf::VideoMode(500, 500), "test", sf::Style::Close | sf::Style::Resize);
+	sf::RenderWindow window(sf::VideoMode(500, 500), "Black_jack_rpg0.1", sf::Style::Close | sf::Style::Resize);
 	window.setFramerateLimit(60);
 	//card tc(&dkj);
 	//tc.info.point
@@ -219,14 +220,53 @@ int main() {
 
 
 	//enemy
-	enemy e(&Texture,1, 3 ,100,100);
-	e.Enemy.setTexture(&Texture);
-	Enemyvec.push_back(e);
+	enemy x(&Texture, 2,1, 100, 100);
+	x.Enemy.setTexture(&Texture);
+	Enemyvec.push_back(x);
+
+	enemy a(&Texture, 1, 1, 300, 100);
+	a.Enemy.setTexture(&Texture);
+	Enemyvec.push_back(a);
+
+	enemy b(&Texture,2 ,1, 400, 100);
+	b.Enemy.setTexture(&Texture);
+	Enemyvec.push_back(b);
 
 
+
+	///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	while (window.isOpen()) {
+		sf::Event evnt;
+		while (window.pollEvent(evnt)) {
+			switch (evnt.type) {
+			case sf::Event::Closed:
+				window.close();
+				break;
+			case sf::Event::Resized:
+				std::cout << "width" << evnt.size.width << "height" << evnt.size.height << std::endl;
+				break;
+			case sf::Event::TextEntered:
+				if (evnt.text.unicode < 128) {
+					printf("%c", evnt.text.unicode);
+				}
+			}
+		}
+		/*
+		if (Enemyvec.size() == 0) {
+			level_map++;
+			enemy x(&Texture, 1, 1, 100, 100);
+			x.Enemy.setTexture(&Texture);
+			Enemyvec.push_back(x);
 
+			enemy a(&Texture, 1, 1, 300, 100);
+			a.Enemy.setTexture(&Texture);
+			Enemyvec.push_back(a);
 
+			enemy b(&Texture, 1, 1, 400, 100);
+			b.Enemy.setTexture(&Texture);
+			Enemyvec.push_back(b);
+		}
+		*/
 		int row = 0;
 		int row_count = 0;
 		for (int i = 0; i <= 99; i++) {
@@ -243,23 +283,6 @@ int main() {
 				Wall.push_back(wall);
 			}
 			row_count += 1;
-		}
-
-
-		sf::Event evnt;
-		while (window.pollEvent(evnt)) {
-			switch (evnt.type) {
-			case sf::Event::Closed:
-				window.close();
-				break;
-			case sf::Event::Resized:
-				std::cout << "width" << evnt.size.width << "height" << evnt.size.height << std::endl;
-				break;
-			case sf::Event::TextEntered:
-				if (evnt.text.unicode < 128) {
-					printf("%c", evnt.text.unicode);
-				}
-			}
 		}
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::A)) {
 			player.move(-50.f, 0.f);
@@ -336,14 +359,6 @@ int main() {
 				}
 			}
 		}
-
-		/*
-		if (sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
-			sf::Vector2i mousePos = sf::Mouse::getPosition(window);
-			player.setPosition((float)mousePos.x, (float)mousePos.y);
-		}
-		*/
-
 		window.clear();
 
 
@@ -356,8 +371,9 @@ int main() {
 			}
 		}
 		if (fight == true) {
-			Shuffle();
 			while (fight == true) {
+				clear_card();
+				Shuffle();
 				for (int i = 0; i < Deck.size(); i++) {
 					printf("\n%d ", Deck[i]);
 				}
@@ -413,10 +429,8 @@ int main() {
 						printf_s("\nhero is %d", hero_score);
 						printf_s("\nenemy is %d\n", enemy_score);
 						winer(hero_score, enemy_score);
-						break;
-
-
 						while (sf::Keyboard::isKeyPressed(sf::Keyboard::X)) {}
+						break;
 					}
 				}
 				clear_card();
@@ -425,11 +439,11 @@ int main() {
 				while (not hand_hero.empty()) hand_hero.pop_back();
 				while (not hand_enemy.empty()) hand_enemy.pop_back();
 				fight = false;
+				break;
 			}
 		}
-
-
 		window.draw(player);
+		//window.draw(playercard);
 		window.display();
 	}
 	return 0;

@@ -7,11 +7,16 @@ enemy::enemy(sf::Texture *texture,int mostertype, int hpmoster ,int enemyposy , 
 	sf::Texture texta;
 	texta = *texture;
 	sf::Vector2u textureSize = texta.getSize();
-	texta.loadFromFile("new2.png");
 	float x_size = textureSize.x / 32.000000;
 	float y_size = textureSize.y / 32.000000;
 	Enemy.setTexture(&texta);
-	Enemy.setTextureRect(sf::IntRect(x_size * 29, y_size * 8, x_size, y_size));
+	if (mostertype == 1) {
+		Enemy.setTextureRect(sf::IntRect(x_size * 29, y_size * 8, x_size, y_size));
+	}
+	else if (mostertype == 2) {
+		Enemy.setTextureRect(sf::IntRect(x_size * 29, y_size * 6, x_size, y_size));
+	}
+	
 	Enemy.setPosition(enemyposx, enemyposy);
 	this->hp = hpmoster;
 }
