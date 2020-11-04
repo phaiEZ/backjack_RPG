@@ -354,7 +354,6 @@ int main() {
 			if ((Enemyvec[i].GetHp()) > 0) {
 				Enemyvec[i].draw(window);
 			}
-			
 		}
 		if (fight == true) {
 			Shuffle();
