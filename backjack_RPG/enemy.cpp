@@ -16,6 +16,9 @@ enemy::enemy(sf::Texture *texture,int mostertype, int hpmoster ,int enemyposy , 
 	else if (mostertype == 2) {
 		Enemy.setTextureRect(sf::IntRect(x_size * 29, y_size * 6, x_size, y_size));
 	}
+	else if (mostertype == 3) {
+		Enemy.setTextureRect(sf::IntRect(x_size * 29, y_size * 5, x_size, y_size));
+	}
 	
 	Enemy.setPosition(enemyposx, enemyposy);
 	this->hp = hpmoster;

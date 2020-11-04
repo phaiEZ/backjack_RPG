@@ -228,7 +228,7 @@ int main() {
 	a.Enemy.setTexture(&Texture);
 	Enemyvec.push_back(a);
 
-	enemy b(&Texture,2 ,1, 400, 100);
+	enemy b(&Texture,3 ,1, 400, 100);
 	b.Enemy.setTexture(&Texture);
 	Enemyvec.push_back(b);
 
