@@ -23,7 +23,12 @@ int hero_card;
 int Card[52];
 int enemy_score = 0;
 int hero_score = 0;
-int a, i, x, j, k, c = 0;
+int a;
+int i;
+int x;
+int j;
+int k;
+int c = 0;
 char yes_no;
 bool same;
 int ispim[100];
@@ -38,7 +43,7 @@ int level_map = 0;
 std::vector <enemy> Enemyvec;
 std::vector < int > wall_location;
 char grid[GRID_WIDTH * GRID_HEIGHT];
-
+int level = 1;
 void ResetGrid()
 {
 
@@ -325,6 +330,7 @@ int main() {
 		}
 	}
 
+
 	enemy x(&Texture, 2, 2, 100, 100);
 	x.Enemy.setTexture(&Texture);
 	Enemyvec.push_back(x);
@@ -375,6 +381,10 @@ int main() {
 			row_count += 1;
 		}
 
+
+
+
+
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::A)) {
 			player.move(-50.f, 0.f);
 			walk = 1;
@@ -407,7 +417,14 @@ int main() {
 			player_posy += 1;
 			//printf("position x = %d position y = %d", player_posx, player_posy);
 		}
-		else  if (player.getGlobalBounds().intersects(Door.getGlobalBounds()) ){
+		else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::R)) {
+			player.setPosition(50.0f, 50.0f);
+			randommap();
+			while (sf::Keyboard::isKeyPressed(sf::Keyboard::R)) {
+			}
+			//printf("position x = %d position y = %d", player_posx, player_posy);
+		}
+		else  if (player.getGlobalBounds().intersects(Door.getGlobalBounds()) && sf::Keyboard::isKeyPressed(sf::Keyboard::Key::F)){
 			player.setPosition(50.0f, 50.0f);
 			randommap();
 		}
@@ -538,8 +555,8 @@ int main() {
 				break;
 			}
 		}
-		window.draw(player);
 		window.draw(Door);
+		window.draw(player);
 		/*
 		int h = 0;
 		int c = 0;
