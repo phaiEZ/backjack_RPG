@@ -1,4 +1,4 @@
-#include <SFML/Graphics.hpp>
+﻿#include <SFML/Graphics.hpp>
 #include <iostream>
 #include <vector>
 #include<stdio.h>
@@ -506,7 +506,7 @@ int main() {
 		}
 		for (int i = 0; i < Enemyvec.size(); i++) {
 			if ((Enemyvec[i].GetHp()) < Enemyvec[i].GetmaxHp()) {
-				//?????????
+				//หลอดเลือด
 			}
 		}
 		window.draw(Door);
@@ -547,7 +547,7 @@ int main() {
 					Card[hand_enemy[i] - 1].setPosition((player.getPosition().x + 25 * i) - 25, player.getPosition().y - 25);
 					window.draw(Card[hand_enemy[i] - 1]);
 				}
-				printf("1");
+				//printf("1");
 				window.display();
 				printf("hero score");
 				printf("%d", hero_score);
@@ -571,7 +571,7 @@ int main() {
 								window.draw(Card[hand_enemy[i] - 1]);
 
 							}
-							printf("3");
+							//printf("3");
 							window.display();
 							break;
 						}
@@ -588,7 +588,7 @@ int main() {
 							window.draw(Card[hand_enemy[i] - 1]);
 
 						}
-						printf("4");
+						//printf("4");
 						window.display();
 						Deck.pop_back();
 						if (too_more(enemy_score) == 1) {
@@ -607,7 +607,7 @@ int main() {
 								window.draw(Card[hand_enemy[i] - 1]);
 
 							}
-							printf("5");
+							//printf("5");
 							window.display();
 							cl.restart();
 							while (true) {
@@ -626,7 +626,7 @@ int main() {
 								}
 								window.display();
 							}
-							printf("6");
+							//printf("6");
 						break;
 						}
 					printf("\nhand hero\n");
@@ -644,12 +644,24 @@ int main() {
 						window.draw(Card[hand_enemy[i] - 1]);
 
 					}
-					printf("7");
+					//printf("7");
 					window.display();
 					while (sf::Keyboard::isKeyPressed(sf::Keyboard::Z)) {}
 				}
 				////////////////////////////////////////////////////
 					if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::X)) {
+						for (int i = 0; i < hand_hero.size(); i++)
+						{
+							Card[hand_hero[i] - 1].setPosition((player.getPosition().x + 25 * i) - 25, player.getPosition().y + 50);
+							window.draw(Card[hand_hero[i] - 1]);
+						}
+						for (int i = 0; i < hand_enemy.size(); i++)
+						{
+							Card[hand_enemy[i] - 1].setPosition((player.getPosition().x + 25 * i) - 25, player.getPosition().y - 25);
+							window.draw(Card[hand_enemy[i] - 1]);
+
+						}
+						window.display();
 						fight = false;
 						printf_s("\nhero is %d", hero_score);
 						printf_s("\nenemy is %d\n", enemy_score);
@@ -681,21 +693,6 @@ int main() {
 							if (hero_score < enemy_score) {
 								printf("hero is lose  TT \n");
 							}
-						/// <summary>//////////////////////
-
-						for (int i = 0; i < hand_hero.size(); i++)
-						{
-							Card[hand_hero[i] - 1].setPosition((player.getPosition().x + 25 * i) - 25, player.getPosition().y + 50);
-							window.draw(Card[hand_hero[i] - 1]);
-						}
-						for (int i = 0; i < hand_enemy.size(); i++)
-						{
-							Card[hand_enemy[i] - 1].setPosition((player.getPosition().x + 25 * i) - 25, player.getPosition().y - 25);
-							window.draw(Card[hand_enemy[i] - 1]);
-
-						}
-						printf("8");
-						window.display();
 						break;
 					}
 				}
