@@ -6,6 +6,7 @@ class enemy {
 private:
 	
 	int hp;
+	int maxhp;
 	int enemyposx;
 	int enemyposy;
 public:
@@ -13,6 +14,7 @@ public:
 	void draw(sf::RenderWindow& window);
 	void takedamage();
 	int GetHp() { return hp; }
+	int GetmaxHp() { return maxhp; }
 	sf::RectangleShape Enemy;
 
 };

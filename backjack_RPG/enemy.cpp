@@ -22,6 +22,7 @@ enemy::enemy(sf::Texture *texture,int mostertype, int hpmoster ,int enemyposy , 
 	
 	Enemy.setPosition(enemyposx, enemyposy);
 	this->hp = hpmoster;
+	this->maxhp = hpmoster;
 }
 
 void enemy::draw(sf::RenderWindow& window)
