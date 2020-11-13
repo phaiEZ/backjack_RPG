@@ -52,7 +52,7 @@ int herodamage;
 int herohp;
 int sheildnum;
 std::vector <enemy> Enemyvec;
-
+int coin = 0;
 void ResetGrid()
 {
 
@@ -527,12 +527,12 @@ int main() {
 		window.draw(player);
 
 		/// UI //////////////////////////////////////////////////////////////	
-		sf::RectangleShape haert(sf::Vector2f(75.0f, 75.0f));
-		haert.setOrigin(0.f, 0.f);
-		haert.setPosition(0, shifty);
-		haert.setTexture(&Texture);
-		haert.setTextureRect(sf::IntRect(x_size * 26.0000000, y_size * 22.0000000, x_size, y_size));
-		window.draw(haert);
+		sf::RectangleShape UI(sf::Vector2f(75.0f, 75.0f));
+		UI.setOrigin(0.f, 0.f);
+		UI.setPosition(0, shifty);
+		UI.setTexture(&Texture);
+		UI.setTextureRect(sf::IntRect(x_size * 26.0000000, y_size * 22.0000000, x_size, y_size));
+		window.draw(UI);
 
 		sf::RectangleShape X(sf::Vector2f(45.0f, 45.0f));
 		X.setOrigin(0.f, 0.f);
@@ -551,12 +551,12 @@ int main() {
 
 
 
-		sf::RectangleShape sheild(sf::Vector2f(75.0f, 75.0f));
-		sheild.setOrigin(0.f, 0.f);
-		sheild.setPosition(0 + 2.5, shifty + 75);
-		sheild.setTexture(&Texture);
-		sheild.setTextureRect(sf::IntRect(x_size * 7.0000000, y_size * 24.0000000, x_size, y_size));
-		window.draw(sheild);
+
+		UI.setOrigin(0.f, 0.f);
+		UI.setPosition(0 + 2.5, shifty + 75);
+		UI.setTexture(&Texture);
+		UI.setTextureRect(sf::IntRect(x_size * 5.0000000, y_size * 26.0000000, x_size, y_size));
+		window.draw(UI);
 
 		X.setOrigin(0.f, 0.f);
 		X.setPosition(65.f, shifty + 19 + 75);
@@ -569,6 +569,33 @@ int main() {
 		NUM.setTexture(&Texture);
 		NUM.setTextureRect(sf::IntRect(x_size* (19.0000000 + sheildnum), y_size * 29.0000000, x_size, y_size));
 		window.draw(NUM);
+
+
+		NUM.setOrigin(0.f, 0.f);
+		NUM.setPosition(800, shifty + 5);
+		NUM.setTexture(&Texture);
+		NUM.setTextureRect(sf::IntRect(x_size* (19.0000000 + herodamage), y_size * 29.0000000, x_size, y_size));
+		window.draw(NUM);
+
+		UI.setOrigin(0.f, 0.f);
+		UI.setPosition(865, shifty);
+		UI.setTexture(&Texture);
+		UI.setFillColor(sf::Color::Blue);
+		UI.setTextureRect(sf::IntRect(x_size * 4.0000000, y_size * 30.0000000, x_size, y_size));
+		window.draw(UI);
+
+		NUM.setOrigin(0.f, 0.f);
+		NUM.setPosition(800, shifty + 80);
+		NUM.setTexture(&Texture);
+		NUM.setTextureRect(sf::IntRect(x_size * (19.0000000 + coin), y_size * 29.0000000, x_size, y_size));
+		window.draw(NUM);
+
+		UI.setOrigin(0.f, 0.f);
+		UI.setPosition(865, shifty+75);
+		UI.setTexture(&Texture);
+		UI.setFillColor(sf::Color::Yellow);
+		UI.setTextureRect(sf::IntRect(x_size * 7.0000000, y_size * 24.0000000, x_size, y_size));
+		window.draw(UI);
 
 		/// UI //////////////////////////////////////////////////////////////
 		if (fight == true) {
