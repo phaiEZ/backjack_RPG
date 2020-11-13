@@ -18,6 +18,9 @@ using namespace std;
 #define SOUTH 2
 #define WEST 3
 
+float shiftx = 200;
+float shifty = 100;
+
 int enemy_card;
 int hero_card;
 int Card[52];
@@ -40,14 +43,15 @@ std::vector <int> hand_hero;
 std::vector <int> hand_enemy;
 int enemynum;
 int level_map = 0;
-std::vector <enemy> Enemyvec;
 std::vector < int > wall_location;
 char grid[GRID_WIDTH * GRID_HEIGHT];
 int level = 1;
 sf::Clock cl;
 float Time;
-
-
+int herodamage;
+int herohp = 3;
+int sheildnum = 0;
+std::vector <enemy> Enemyvec;
 
 void ResetGrid()
 {
@@ -186,11 +190,12 @@ int winer(int a, int b) {
 	}
 	if (a > b) {
 		printf("hero is winner  ^^ \n");
-		Enemyvec[enemynum].takedamage();
+		Enemyvec[enemynum].takedamage(herodamage);
 		return 0;
 	}
 	if (a < b) {
 		printf("hero is lose  TT \n");
+		herohp -= 1;
 		return 0;
 	}
 }
@@ -282,7 +287,7 @@ void ResizeView(const sf::RenderWindow& window, sf::View& view)
 
 int main() {
 	randommap();
-	sf::RenderWindow window(sf::VideoMode(550, 550), "Black_jack_rpg0.1", sf::Style::Close | sf::Style::Fullscreen);
+	sf::RenderWindow window(sf::VideoMode(550 + shiftx, 550+ shifty), "Black_jack_rpg0.1", sf::Style::Close | sf::Style::Fullscreen);
 	window.setFramerateLimit(30);
 	sf::Texture Texture;
 	Texture.loadFromFile("new2.png");
@@ -290,7 +295,7 @@ int main() {
 	float x_size = textureSize.x / 32.000000;
 	float y_size = textureSize.y / 32.000000;
 
-	sf::View view(sf::Vector2f(+300.0f, +300.0f), sf::Vector2f(VIEW_HEIGHT, VIEW_HEIGHT*0.6));
+	sf::View view(sf::Vector2f(+500.0f, +350.0f), sf::Vector2f(VIEW_HEIGHT, VIEW_HEIGHT*0.6));
 
 	std::vector<sf::RectangleShape> Wall;
 	sf::RectangleShape wall(sf::Vector2f(50.0f, 50.0f));
@@ -298,18 +303,17 @@ int main() {
 	//player
 	sf::RectangleShape player(sf::Vector2f(50.0f, 50.0f));
 	player.setOrigin(0.f, 0.f);
-	player.setPosition(50.0f, 50.0f);
+	player.setPosition(50.0f + shiftx, 50.0f + shifty);
 	player.setTexture(&Texture);
 	//player.setFillColor(sf::Color::Red);
 	player.setTextureRect(sf::IntRect(x_size * 25, y_size * 0, x_size, y_size));
+	herodamage = 2;
 	// position
-	int player_posx = 1;
-	int player_posy = 1;
 
 	// door
 	sf::RectangleShape Door(sf::Vector2f(50.0f, 50.0f));
 	Door.setOrigin(0.f, 0.f);
-	Door.setPosition(450.0f, 50.0f);
+	Door.setPosition(450.0f + shiftx, 50.0f + shifty);
 	Door.setTexture(&Texture);
 	Door.setTextureRect(sf::IntRect(x_size * 3, y_size * 6, x_size, y_size));
 
@@ -344,22 +348,19 @@ int main() {
 	}
 
 
-	enemy x(&Texture, 2, 2, 100, 100);
+	//std::vector <enemy> Enemyvec;
 
-
-
+	enemy x(&Texture, 2, 2, 150 + shiftx, 100+ shifty);
 	x.Enemy.setTexture(&Texture);
 	Enemyvec.push_back(x);
 
-	enemy a(&Texture, 1, 3, 300, 100);
+	enemy a(&Texture, 1, 3, 50 + shiftx, 250 + shifty);
 	a.Enemy.setTexture(&Texture);
 	Enemyvec.push_back(a);
 
-	enemy b(&Texture, 3, 4, 400, 100);
+	enemy b(&Texture, 3, 4, 350 + shiftx, 450 + shifty);
 	b.Enemy.setTexture(&Texture);
 	Enemyvec.push_back(b);
-	/// blood
-
 
 
 	///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -391,7 +392,7 @@ int main() {
 				row += 1;
 			}
 			if (wall_location[i] == '1') {
-				wall.setPosition(50 * row_count, row * 50);
+				wall.setPosition(50 * row_count + shiftx, (row * 50 )+ shifty);
 				wall.setTexture(&Texture);
 				wall.setTextureRect(sf::IntRect(x_size * 23.00000, y_size * 3.00000, x_size, y_size));
 				Wall.push_back(wall);
@@ -405,7 +406,6 @@ int main() {
 			walk = 1;
 			while (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::A)) {
 			}
-			player_posx -= 1;
 			//printf("position x = %d position y = %d",player_posx,player_posy);
 		}
 		else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::D)) {
@@ -415,7 +415,6 @@ int main() {
 			walk = 2;
 			while (sf::Keyboard::isKeyPressed(sf::Keyboard::D)) {
 			}
-			player_posx += 1;
 			//printf("position x = %d position y = %d", player_posx, player_posy);
 		}
 		else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::W)) {
@@ -427,7 +426,6 @@ int main() {
 
 			while (sf::Keyboard::isKeyPressed(sf::Keyboard::W)) {
 			}
-			player_posy -= 1;
 			//printf("position x = %d position y = %d", player_posx, player_posy);
 		}
 		else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::S)) {
@@ -438,38 +436,36 @@ int main() {
 			walk = 4;
 			while (sf::Keyboard::isKeyPressed(sf::Keyboard::S)) {
 			}
-			player_posy += 1;
 			//printf("position x = %d position y = %d", player_posx, player_posy);
 		}
-		else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::R)) {
-			player.setPosition(50.0f, 50.0f);
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::R)) {  
+			player.setPosition(50.0f + shiftx, 50.0f + shifty);
 			randommap();
 			while (sf::Keyboard::isKeyPressed(sf::Keyboard::R)) {
 			}
 			//printf("position x = %d position y = %d", player_posx, player_posy);
 		}
-		else  if (player.getGlobalBounds().intersects(Door.getGlobalBounds()) && sf::Keyboard::isKeyPressed(sf::Keyboard::Key::F)) {
-			player.setPosition(50.0f, 50.0f);
+		if (player.getGlobalBounds().intersects(Door.getGlobalBounds()) && sf::Keyboard::isKeyPressed(sf::Keyboard::Key::F)) {
+			player.setPosition(50.0f + shiftx , 50.0f + shifty);
 			randommap();
+		}
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Escape)) {
+			break;
 		}
 
 		for (int i = 0; i < Enemyvec.size(); i++) {
 			if (player.getGlobalBounds().intersects(Enemyvec[i].Enemy.getGlobalBounds()) && (Enemyvec[i].GetHp()) > 0) {
 				if (walk == 1) {
 					player.move(50.f, 0.f);
-					player_posx += 1;
 				}
 				else if (walk == 2) {
 					player.move(-50.f, 0.0f);
-					player_posx -= 1;
 				}
 				else if (walk == 3) {
 					player.move(0.0f, 50.f);
-					player_posy += 1;
 				}
 				else if (walk == 4) {
 					player.move(0.0f, -50.f);
-					player_posy -= 1;
 				}
 				fight = true;
 				enemynum = i;
@@ -480,19 +476,15 @@ int main() {
 			if (player.getGlobalBounds().intersects(Wall[i].getGlobalBounds())) {
 				if (walk == 1) {
 					player.move(50.f, 0.f);
-					player_posx += 1;
 				}
 				else if (walk == 2) {
 					player.move(-50.f, 0.0f);
-					player_posx -= 1;
 				}
 				else if (walk == 3) {
 					player.move(0.0f, 50.f);
-					player_posy += 1;
 				}
 				else if (walk == 4) {
 					player.move(0.0f, -50.f);
-					player_posy -= 1;
 				}
 			}
 		}
@@ -504,6 +496,7 @@ int main() {
 				Enemyvec[i].draw(window);
 			}
 		}
+		/// Blood
 		for (int i = 0; i < Enemyvec.size(); i++) {
 			if ((Enemyvec[i].GetHp()) < Enemyvec[i].GetmaxHp() && Enemyvec[i].GetHp() > 0) {
 				sf::RectangleShape bloodmax(sf::Vector2f(50.0f, 10.0f));
@@ -520,6 +513,52 @@ int main() {
 		}
 		window.draw(Door);
 		window.draw(player);
+
+		/// UI //////////////////////////////////////////////////////////////	
+		sf::RectangleShape haert(sf::Vector2f(75.0f, 75.0f));
+		haert.setOrigin(0.f, 0.f);
+		haert.setPosition(0, shifty);
+		haert.setTexture(&Texture);
+		haert.setTextureRect(sf::IntRect(x_size * 26.0000000, y_size * 22.0000000, x_size, y_size));
+		window.draw(haert);
+
+		sf::RectangleShape X(sf::Vector2f(45.0f, 45.0f));
+		X.setOrigin(0.f, 0.f);
+		X.setPosition(65.f, shifty + 19);
+		X.setTexture(&Texture);
+		X.setTextureRect(sf::IntRect(x_size * 29.0000000, y_size * 31.0000000, x_size, y_size));
+		window.draw(X);
+
+
+		sf::RectangleShape NUM(sf::Vector2f(70.0f, 70.0f));
+		NUM.setOrigin(0.f, 0.f);
+		NUM.setPosition(90.f, shifty + 3);
+		NUM.setTexture(&Texture);
+		NUM.setTextureRect(sf::IntRect(x_size * (19.0000000 + herohp), y_size * 29.0000000, x_size, y_size));
+		window.draw(NUM);
+
+
+
+		sf::RectangleShape sheild(sf::Vector2f(75.0f, 75.0f));
+		sheild.setOrigin(0.f, 0.f);
+		sheild.setPosition(0 + 2.5, shifty + 75);
+		sheild.setTexture(&Texture);
+		sheild.setTextureRect(sf::IntRect(x_size * 7.0000000, y_size * 24.0000000, x_size, y_size));
+		window.draw(sheild);
+
+		X.setOrigin(0.f, 0.f);
+		X.setPosition(65.f, shifty + 19 + 75);
+		X.setTexture(&Texture);
+		X.setTextureRect(sf::IntRect(x_size * 29.0000000, y_size * 31.0000000, x_size, y_size));
+		window.draw(X);
+
+		NUM.setOrigin(0.f, 0.f);
+		NUM.setPosition(90.f, shifty + 78);
+		NUM.setTexture(&Texture);
+		NUM.setTextureRect(sf::IntRect(x_size* (19.0000000 + sheildnum), y_size * 29.0000000, x_size, y_size));
+		window.draw(NUM);
+
+		/// UI //////////////////////////////////////////////////////////////
 		if (fight == true) {
 			hand_hero.erase(hand_hero.begin(),hand_hero.end());
 			hand_enemy.erase(hand_enemy.begin(),hand_enemy.end());
@@ -569,6 +608,7 @@ int main() {
 							printf_s("\nhero is %d", hero_score);
 							printf_s("\nenemy is %d\n", enemy_score);
 							printf("hero is lose  TT \n");
+							herohp -= 1;
 							for (int i = 0; i < hand_hero.size(); i++)
 							{
 								Card[hand_hero[i] - 1].setPosition((player.getPosition().x + 25 * i) - 25, player.getPosition().y + 50);
@@ -620,7 +660,7 @@ int main() {
 							printf_s("\nhero is %d", hero_score);
 							printf_s("\nenemy is %d\n", enemy_score);
 							printf("hero is winner  ^^ \n");
-							Enemyvec[enemynum].takedamage();
+							Enemyvec[enemynum].takedamage(herodamage);
 							for (int i = 0; i < hand_hero.size(); i++)
 							{
 								Card[hand_hero[i] - 1].setPosition((player.getPosition().x + 25 * i) - 25, player.getPosition().y + 50);
@@ -713,10 +753,11 @@ int main() {
 									window.display();
 								
 								}
-								Enemyvec[enemynum].takedamage();
+								Enemyvec[enemynum].takedamage(herodamage);
 							}
 							if (hero_score < enemy_score) {
 								printf("hero is lose  TT \n");
+								herohp -= 1;
 								cl.restart();
 								while (true) {
 									Time = cl.getElapsedTime().asSeconds();

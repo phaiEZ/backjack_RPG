@@ -1,7 +1,7 @@
 #include "enemy.h"
 #include <SFML/Graphics.hpp>
 #include <iostream>
-enemy::enemy(sf::Texture *texture,int mostertype, int hpmoster ,int enemyposy , int enemyposx){
+enemy::enemy(sf::Texture *texture,int mostertype, int hpmoster ,int enemyposx , int enemyposy){
 	Enemy.setSize(sf::Vector2f(50.0f, 50.0f));
 	Enemy.setOrigin(0.f, 0.f);
 	sf::Texture texta;
@@ -31,7 +31,7 @@ void enemy::draw(sf::RenderWindow& window)
 
 }
 
-void enemy::takedamage()
+void enemy::takedamage(int damage)
 {
-	this->hp = hp - 1;
+	this->hp = hp - damage;
 }
