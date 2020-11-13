@@ -13,8 +13,8 @@ public:
 	enemy(sf::Texture* texture, int mostertype, int hpmoster, int enemyposy, int enemyposx);
 	void draw(sf::RenderWindow& window);
 	void takedamage();
-	int GetHp() { return hp; }
-	int GetmaxHp() { return maxhp; }
+	float GetHp() { return hp; }
+	float GetmaxHp() { return maxhp; }
 	sf::RectangleShape Enemy;
 
 };

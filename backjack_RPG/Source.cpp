@@ -345,19 +345,29 @@ int main() {
 
 
 	enemy x(&Texture, 2, 2, 100, 100);
+
+
+
 	x.Enemy.setTexture(&Texture);
 	Enemyvec.push_back(x);
 
-	enemy a(&Texture, 1, 2, 300, 100);
+	enemy a(&Texture, 1, 3, 300, 100);
 	a.Enemy.setTexture(&Texture);
 	Enemyvec.push_back(a);
 
-	enemy b(&Texture, 3, 2, 400, 100);
+	enemy b(&Texture, 3, 4, 400, 100);
 	b.Enemy.setTexture(&Texture);
 	Enemyvec.push_back(b);
+	/// blood
+	/// 
+	/// 
+	/// 
+	/// 
+	/// 
 
 	sf::RectangleShape bloodmax(sf::Vector2f(50.0f, 10.0f));
 	bloodmax.setOrigin(0.f, 0.f);
+
 
 
 	///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -520,6 +530,12 @@ int main() {
 			if ((Enemyvec[i].GetHp()) < Enemyvec[i].GetmaxHp() && Enemyvec[i].GetHp() > 0) {
 				bloodmax.setPosition(Enemyvec[i].Enemy.getPosition().x, Enemyvec[i].Enemy.getPosition().y -5);
 				window.draw(bloodmax);
+
+				sf::RectangleShape blood(sf::Vector2f(42  *(Enemyvec[i].GetHp() / Enemyvec[i].GetmaxHp()), 6.0f));
+				blood.setFillColor(sf::Color::Red);
+				blood.setPosition(Enemyvec[i].Enemy.getPosition().x + 4, Enemyvec[i].Enemy.getPosition().y - 3);
+				blood.setOrigin(0.f, 0.f);
+				window.draw(blood);
 			}
 		}
 		window.draw(Door);
