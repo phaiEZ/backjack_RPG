@@ -359,11 +359,6 @@ int main() {
 	b.Enemy.setTexture(&Texture);
 	Enemyvec.push_back(b);
 	/// blood
-	/// 
-	/// 
-	/// 
-	/// 
-	/// 
 
 	sf::RectangleShape bloodmax(sf::Vector2f(50.0f, 10.0f));
 	bloodmax.setOrigin(0.f, 0.f);
