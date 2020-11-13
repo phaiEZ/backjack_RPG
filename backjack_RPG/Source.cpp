@@ -270,9 +270,19 @@ char card_type(int a) {
 	}
 }
 
+static const float VIEW_HEIGHT = 1300.0f; //900
+
+
+void ResizeView(const sf::RenderWindow& window, sf::View& view)
+{
+	float aspectRatio = float(window.getSize().x) / float(window.getSize().y);
+
+	view.setSize(VIEW_HEIGHT * aspectRatio * 1, VIEW_HEIGHT * 3);
+}
+
 int main() {
 	randommap();
-	sf::RenderWindow window(sf::VideoMode(550, 550), "Black_jack_rpg0.1", sf::Style::Close | sf::Style::Resize);
+	sf::RenderWindow window(sf::VideoMode(550, 550), "Black_jack_rpg0.1", sf::Style::Close | sf::Style::Fullscreen);
 	window.setFramerateLimit(30);
 	sf::Texture Texture;
 	Texture.loadFromFile("new2.png");
@@ -280,11 +290,10 @@ int main() {
 	float x_size = textureSize.x / 32.000000;
 	float y_size = textureSize.y / 32.000000;
 
-
+	sf::View view(sf::Vector2f(+300.0f, +300.0f), sf::Vector2f(VIEW_HEIGHT, VIEW_HEIGHT*0.6));
 
 	std::vector<sf::RectangleShape> Wall;
 	sf::RectangleShape wall(sf::Vector2f(50.0f, 50.0f));
-
 
 	//player
 	sf::RectangleShape player(sf::Vector2f(50.0f, 50.0f));
@@ -333,6 +342,8 @@ int main() {
 			Card.push_back(card);
 		}
 	}
+
+
 	enemy x(&Texture, 2, 2, 100, 100);
 	x.Enemy.setTexture(&Texture);
 	Enemyvec.push_back(x);
@@ -345,8 +356,8 @@ int main() {
 	b.Enemy.setTexture(&Texture);
 	Enemyvec.push_back(b);
 
-
-
+	sf::RectangleShape bloodmax(sf::Vector2f(50.0f, 10.0f));
+	bloodmax.setOrigin(0.f, 0.f);
 
 
 	///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -360,6 +371,7 @@ int main() {
 				break;
 			case sf::Event::Resized:
 				std::cout << "width" << evnt.size.width << "height" << evnt.size.height << std::endl;
+				ResizeView(window, view);
 				break;
 			case sf::Event::TextEntered:
 				if (evnt.text.unicode < 128) {
@@ -408,6 +420,7 @@ int main() {
 			player.move(0.0f, -50.f);
 			hand_hero.erase(hand_hero.begin(), hand_hero.end());
 			hand_enemy.erase(hand_enemy.begin(), hand_enemy.end());
+
 			walk = 3;
 
 			while (sf::Keyboard::isKeyPressed(sf::Keyboard::W)) {
@@ -419,6 +432,7 @@ int main() {
 			player.move(0.0f, 50.f);
 			hand_hero.erase(hand_hero.begin(), hand_hero.end());
 			hand_enemy.erase(hand_enemy.begin(), hand_enemy.end());
+			window.clear();
 			walk = 4;
 			while (sf::Keyboard::isKeyPressed(sf::Keyboard::S)) {
 			}
@@ -494,8 +508,6 @@ int main() {
 				}
 			}
 		}
-
-
 		for (int i = 0; i < Wall.size(); i++) {
 			window.draw(Wall[i]);
 		}
@@ -505,8 +517,9 @@ int main() {
 			}
 		}
 		for (int i = 0; i < Enemyvec.size(); i++) {
-			if ((Enemyvec[i].GetHp()) < Enemyvec[i].GetmaxHp()) {
-				//หลอดเลือด
+			if ((Enemyvec[i].GetHp()) < Enemyvec[i].GetmaxHp() && Enemyvec[i].GetHp() > 0) {
+				bloodmax.setPosition(Enemyvec[i].Enemy.getPosition().x, Enemyvec[i].Enemy.getPosition().y -5);
+				window.draw(bloodmax);
 			}
 		}
 		window.draw(Door);
@@ -514,8 +527,8 @@ int main() {
 		if (fight == true) {
 			hand_hero.erase(hand_hero.begin(),hand_hero.end());
 			hand_enemy.erase(hand_enemy.begin(),hand_enemy.end());
-			//while (not hand_hero.empty()) hand_hero.pop_back();
-			//while (not hand_enemy.empty()) hand_enemy.pop_back();
+			while (not hand_hero.empty()) hand_hero.pop_back();
+			while (not hand_enemy.empty()) hand_enemy.pop_back();
 				clear_card();
 				Shuffle();
 				for (int i = 0; i < Deck.size(); i++) {
@@ -720,6 +733,7 @@ int main() {
 		}
 		*/
 		//window.draw(playercard);
+		window.setView(view);
 		window.display();
 	}
 	return 0;
