@@ -49,8 +49,8 @@ int level = 1;
 sf::Clock cl;
 float Time;
 int herodamage;
-int herohp = 3;
-int sheildnum = 0;
+int herohp;
+int sheildnum;
 std::vector <enemy> Enemyvec;
 
 void ResetGrid()
@@ -183,22 +183,7 @@ int clear_card() {
 	return 0;
 }
 
-int winer(int a, int b) {
-	if (a == b) {
-		printf("draw  ;-; \n");
-		return 0;
-	}
-	if (a > b) {
-		printf("hero is winner  ^^ \n");
-		Enemyvec[enemynum].takedamage(herodamage);
-		return 0;
-	}
-	if (a < b) {
-		printf("hero is lose  TT \n");
-		herohp -= 1;
-		return 0;
-	}
-}
+
 
 int too_more(int a) {
 	if (a > 21) {
@@ -285,6 +270,31 @@ void ResizeView(const sf::RenderWindow& window, sf::View& view)
 	view.setSize(VIEW_HEIGHT * aspectRatio * 1, VIEW_HEIGHT * 3);
 }
 
+void herogetdamage() {
+	if (sheildnum >= 1) {
+		sheildnum = sheildnum - 1;
+	}
+	else {
+		herohp = herohp - 1;
+	}
+}
+
+int winer(int a, int b) {
+	if (a == b) {
+		printf("draw  ;-; \n");
+		return 0;
+	}
+	if (a > b) {
+		printf("hero is winner  ^^ \n");
+		Enemyvec[enemynum].takedamage(herodamage);
+		return 0;
+	}
+	if (a < b) {
+		printf("hero is lose  TT \n");
+		herogetdamage();
+		return 0;
+	}
+}
 int main() {
 	randommap();
 	sf::RenderWindow window(sf::VideoMode(550 + shiftx, 550+ shifty), "Black_jack_rpg0.1", sf::Style::Close | sf::Style::Fullscreen);
@@ -307,7 +317,9 @@ int main() {
 	player.setTexture(&Texture);
 	//player.setFillColor(sf::Color::Red);
 	player.setTextureRect(sf::IntRect(x_size * 25, y_size * 0, x_size, y_size));
-	herodamage = 2;
+	herodamage = 1;
+	herohp = 3;
+	sheildnum = 1;
 	// position
 
 	// door
@@ -608,7 +620,7 @@ int main() {
 							printf_s("\nhero is %d", hero_score);
 							printf_s("\nenemy is %d\n", enemy_score);
 							printf("hero is lose  TT \n");
-							herohp -= 1;
+							herogetdamage();
 							for (int i = 0; i < hand_hero.size(); i++)
 							{
 								Card[hand_hero[i] - 1].setPosition((player.getPosition().x + 25 * i) - 25, player.getPosition().y + 50);
@@ -757,7 +769,7 @@ int main() {
 							}
 							if (hero_score < enemy_score) {
 								printf("hero is lose  TT \n");
-								herohp -= 1;
+								herogetdamage();
 								cl.restart();
 								while (true) {
 									Time = cl.getElapsedTime().asSeconds();
@@ -808,5 +820,4 @@ int main() {
 		window.display();
 	}
 	return 0;
-
 }
