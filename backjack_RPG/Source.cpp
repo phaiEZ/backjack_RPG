@@ -360,9 +360,6 @@ int main() {
 	Enemyvec.push_back(b);
 	/// blood
 
-	sf::RectangleShape bloodmax(sf::Vector2f(50.0f, 10.0f));
-	bloodmax.setOrigin(0.f, 0.f);
-
 
 
 	///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -454,20 +451,6 @@ int main() {
 		else  if (player.getGlobalBounds().intersects(Door.getGlobalBounds()) && sf::Keyboard::isKeyPressed(sf::Keyboard::Key::F)) {
 			player.setPosition(50.0f, 50.0f);
 			randommap();
-			enemy x(&Texture, 2, 2, 100, 100);
-			x.Enemy.setTexture(&Texture);
-			Enemyvec.push_back(x);
-
-			enemy a(&Texture, 1, 2, 300, 100);
-			a.Enemy.setTexture(&Texture);
-			Enemyvec.push_back(a);
-
-			enemy b(&Texture, 3, 2, 400, 100);
-			b.Enemy.setTexture(&Texture);
-			Enemyvec.push_back(b);
-
-
-
 		}
 
 		for (int i = 0; i < Enemyvec.size(); i++) {
@@ -523,6 +506,8 @@ int main() {
 		}
 		for (int i = 0; i < Enemyvec.size(); i++) {
 			if ((Enemyvec[i].GetHp()) < Enemyvec[i].GetmaxHp() && Enemyvec[i].GetHp() > 0) {
+				sf::RectangleShape bloodmax(sf::Vector2f(50.0f, 10.0f));
+				bloodmax.setOrigin(0.f, 0.f);
 				bloodmax.setPosition(Enemyvec[i].Enemy.getPosition().x, Enemyvec[i].Enemy.getPosition().y -5);
 				window.draw(bloodmax);
 
@@ -595,8 +580,24 @@ int main() {
 								window.draw(Card[hand_enemy[i] - 1]);
 
 							}
-							//printf("3");
-							window.display();
+							cl.restart();
+							while (true) {
+								Time = cl.getElapsedTime().asSeconds();
+								//cout << "kuy" << endl;
+								if (Time <= 0.5) {
+									player.setFillColor(sf::Color::Red);
+									window.draw(player);
+									//cout << "itai" << endl;
+								}
+								else {
+									player.setFillColor(sf::Color::White);
+									window.draw(player);
+									cout << "ahhhhh" << endl;
+									break;
+								}
+								window.display();
+
+							}
 							break;
 						}
 						hand_enemy.push_back(Deck.back());
@@ -716,6 +717,24 @@ int main() {
 							}
 							if (hero_score < enemy_score) {
 								printf("hero is lose  TT \n");
+								cl.restart();
+								while (true) {
+									Time = cl.getElapsedTime().asSeconds();
+									//cout << "kuy" << endl;
+									if (Time <= 0.5) {
+										player.setFillColor(sf::Color::Red);
+										window.draw(player);
+										//cout << "itai" << endl;
+									}
+									else {
+										player.setFillColor(sf::Color::White);
+										window.draw(player);
+										cout << "ahhhhh" << endl;
+										break;
+									}
+									window.display();
+
+								}
 							}
 						break;
 					}
