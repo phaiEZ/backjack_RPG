@@ -45,7 +45,7 @@ int enemynum;
 int level_map = 0;
 std::vector < int > wall_location;
 char grid[GRID_WIDTH * GRID_HEIGHT];
-int level = 1;
+int level = 0;
 sf::Clock cl;
 float Time;
 int herodamage;
@@ -144,6 +144,7 @@ int randommap() {
 	ResetGrid();
 	Visit(1, 1);
 	PrintGrid();
+	level++;
 	return 0;
 }
 ////////////////////////////////////////////////////////////
@@ -297,7 +298,7 @@ int winer(int a, int b) {
 }
 int main() {
 	randommap();
-	sf::RenderWindow window(sf::VideoMode(550 + shiftx, 550+ shifty), "Black_jack_rpg0.1", sf::Style::Close | sf::Style::Fullscreen);
+	sf::RenderWindow window(sf::VideoMode(550 + shiftx, 550 + shifty), "Black_jack_rpg0.1", sf::Style::Close | sf::Style::Fullscreen);
 	window.setFramerateLimit(30);
 	sf::Texture Texture;
 	Texture.loadFromFile("new2.png");
@@ -305,7 +306,7 @@ int main() {
 	float x_size = textureSize.x / 32.000000;
 	float y_size = textureSize.y / 32.000000;
 
-	sf::View view(sf::Vector2f(+500.0f, +350.0f), sf::Vector2f(VIEW_HEIGHT, VIEW_HEIGHT*0.6));
+	sf::View view(sf::Vector2f(+500.0f, +350.0f), sf::Vector2f(VIEW_HEIGHT, VIEW_HEIGHT * 0.6));
 
 	std::vector<sf::RectangleShape> Wall;
 	sf::RectangleShape wall(sf::Vector2f(50.0f, 50.0f));
@@ -362,7 +363,7 @@ int main() {
 
 	//std::vector <enemy> Enemyvec;
 
-	enemy x(&Texture, 2, 2, 150 + shiftx, 100+ shifty);
+	enemy x(&Texture, 2, 2, 150 + shiftx, 100 + shifty);
 	x.Enemy.setTexture(&Texture);
 	Enemyvec.push_back(x);
 
@@ -404,7 +405,7 @@ int main() {
 				row += 1;
 			}
 			if (wall_location[i] == '1') {
-				wall.setPosition(50 * row_count + shiftx, (row * 50 )+ shifty);
+				wall.setPosition(50 * row_count + shiftx, (row * 50) + shifty);
 				wall.setTexture(&Texture);
 				wall.setTextureRect(sf::IntRect(x_size * 23.00000, y_size * 3.00000, x_size, y_size));
 				Wall.push_back(wall);
@@ -450,7 +451,7 @@ int main() {
 			}
 			//printf("position x = %d position y = %d", player_posx, player_posy);
 		}
-		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::R)) {  
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::R)) {
 			player.setPosition(50.0f + shiftx, 50.0f + shifty);
 			randommap();
 			while (sf::Keyboard::isKeyPressed(sf::Keyboard::R)) {
@@ -458,7 +459,7 @@ int main() {
 			//printf("position x = %d position y = %d", player_posx, player_posy);
 		}
 		if (player.getGlobalBounds().intersects(Door.getGlobalBounds()) && sf::Keyboard::isKeyPressed(sf::Keyboard::Key::F)) {
-			player.setPosition(50.0f + shiftx , 50.0f + shifty);
+			player.setPosition(50.0f + shiftx, 50.0f + shifty);
 			randommap();
 		}
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Escape)) {
@@ -513,10 +514,10 @@ int main() {
 			if ((Enemyvec[i].GetHp()) < Enemyvec[i].GetmaxHp() && Enemyvec[i].GetHp() > 0) {
 				sf::RectangleShape bloodmax(sf::Vector2f(50.0f, 10.0f));
 				bloodmax.setOrigin(0.f, 0.f);
-				bloodmax.setPosition(Enemyvec[i].Enemy.getPosition().x, Enemyvec[i].Enemy.getPosition().y -5);
+				bloodmax.setPosition(Enemyvec[i].Enemy.getPosition().x, Enemyvec[i].Enemy.getPosition().y - 5);
 				window.draw(bloodmax);
 
-				sf::RectangleShape blood(sf::Vector2f(42  *(Enemyvec[i].GetHp() / Enemyvec[i].GetmaxHp()), 6.0f));
+				sf::RectangleShape blood(sf::Vector2f(42 * (Enemyvec[i].GetHp() / Enemyvec[i].GetmaxHp()), 6.0f));
 				blood.setFillColor(sf::Color::Red);
 				blood.setPosition(Enemyvec[i].Enemy.getPosition().x + 4, Enemyvec[i].Enemy.getPosition().y - 3);
 				blood.setOrigin(0.f, 0.f);
@@ -567,15 +568,54 @@ int main() {
 		NUM.setOrigin(0.f, 0.f);
 		NUM.setPosition(90.f, shifty + 78);
 		NUM.setTexture(&Texture);
-		NUM.setTextureRect(sf::IntRect(x_size* (19.0000000 + sheildnum), y_size * 29.0000000, x_size, y_size));
+		NUM.setTextureRect(sf::IntRect(x_size * (19.0000000 + sheildnum), y_size * 29.0000000, x_size, y_size));
 		window.draw(NUM);
 
+		sf::RectangleShape text(sf::Vector2f(100.0f, 100.0f));
+		text.setOrigin(0.f, 0.f);
+		text.setPosition(250, 0);
+		text.setTexture(&Texture);
+		text.setTextureRect(sf::IntRect(x_size * 30.0000000, y_size * 30.0000000, x_size, y_size));
+		window.draw(text);
 
-		NUM.setOrigin(0.f, 0.f);
-		NUM.setPosition(800, shifty + 5);
-		NUM.setTexture(&Texture);
-		NUM.setTextureRect(sf::IntRect(x_size* (19.0000000 + herodamage), y_size * 29.0000000, x_size, y_size));
-		window.draw(NUM);
+		text.setOrigin(0.f, 0.f);
+		text.setPosition(300, 0);
+		text.setTexture(&Texture);
+		text.setTextureRect(sf::IntRect(x_size * 23.0000000, y_size * 30.0000000, x_size, y_size));
+		window.draw(text);
+
+		text.setOrigin(0.f, 0.f);
+		text.setPosition(350, 0);
+		text.setTexture(&Texture);
+		text.setTextureRect(sf::IntRect(x_size * 27.0000000, y_size * 31.0000000, x_size, y_size));
+		window.draw(text);
+
+		text.setOrigin(0.f, 0.f);
+		text.setPosition(400, 0);
+		text.setTexture(&Texture);
+		text.setTextureRect(sf::IntRect(x_size * 23.0000000, y_size * 30.0000000, x_size, y_size));
+		window.draw(text);
+
+		text.setOrigin(0.f, 0.f);
+		text.setPosition(450, 0);
+		text.setTexture(&Texture);
+		text.setTextureRect(sf::IntRect(x_size * 30.0000000, y_size * 30.0000000, x_size, y_size));
+		window.draw(text);
+
+
+		sf::RectangleShape textNUM(sf::Vector2f(100.0f, 100.0f));
+		textNUM.setOrigin(0.f, 0.f);
+		textNUM.setPosition(600, 0);
+		textNUM.setTexture(&Texture);
+		textNUM.setTextureRect(sf::IntRect(x_size* (19.0000000 + level), y_size * 29.0000000, x_size, y_size));
+		window.draw(textNUM);
+
+
+
+
+
+
+
 
 		UI.setOrigin(0.f, 0.f);
 		UI.setPosition(865, shifty);
@@ -585,102 +625,74 @@ int main() {
 		window.draw(UI);
 
 		NUM.setOrigin(0.f, 0.f);
-		NUM.setPosition(800, shifty + 80);
+		NUM.setPosition(800, shifty + 5);
 		NUM.setTexture(&Texture);
-		NUM.setTextureRect(sf::IntRect(x_size * (19.0000000 + coin), y_size * 29.0000000, x_size, y_size));
+		NUM.setTextureRect(sf::IntRect(x_size* (19.0000000 + herodamage), y_size * 29.0000000, x_size, y_size));
 		window.draw(NUM);
 
 		UI.setOrigin(0.f, 0.f);
-		UI.setPosition(865, shifty+75);
+		UI.setPosition(865, shifty + 75);
 		UI.setTexture(&Texture);
 		UI.setFillColor(sf::Color::Yellow);
 		UI.setTextureRect(sf::IntRect(x_size * 7.0000000, y_size * 24.0000000, x_size, y_size));
 		window.draw(UI);
 
+		NUM.setOrigin(0.f, 0.f);
+		NUM.setPosition(800, shifty + 80);
+		NUM.setTexture(&Texture);
+		NUM.setTextureRect(sf::IntRect(x_size* (19.0000000 + coin), y_size * 29.0000000, x_size, y_size));
+		window.draw(NUM);
 		/// UI //////////////////////////////////////////////////////////////
 		if (fight == true) {
-			hand_hero.erase(hand_hero.begin(),hand_hero.end());
-			hand_enemy.erase(hand_enemy.begin(),hand_enemy.end());
+			hand_hero.erase(hand_hero.begin(), hand_hero.end());
+			hand_enemy.erase(hand_enemy.begin(), hand_enemy.end());
 			while (not hand_hero.empty()) hand_hero.pop_back();
 			while (not hand_enemy.empty()) hand_enemy.pop_back();
-				clear_card();
-				Shuffle();
-				for (int i = 0; i < Deck.size(); i++) {
-					printf("\n%d ", Deck[i]);
-				}
-				hand_hero.push_back(Deck.back());
-				hero_score += card_score(Deck.back());
-				Deck.pop_back();
-				hand_enemy.push_back(Deck.back());
-				enemy_score += card_score(Deck.back());
-				Deck.pop_back();
-				hand_hero.push_back(Deck.back());
-				hero_score += card_score(Deck.back());
-				Deck.pop_back();
-				hand_enemy.push_back(Deck.back());
-				enemy_score += card_score(Deck.back());
-				Deck.pop_back();
-				printf("\nhand hero\n");
-				for (int i = 0; i < hand_hero.size(); i++)
-				{
-					Card[hand_hero[i] - 1].setPosition((player.getPosition().x + 25 * i) - 25, player.getPosition().y + 50);
-					window.draw(Card[hand_hero[i] - 1]);
-				}
-				for (int i = 0; i < hand_hero.size(); i++) {
-					printf(" %d", hand_hero[i]);
-				}
-				for (int i = 0; i < hand_enemy.size(); i++)
-				{
-					Card[hand_enemy[i] - 1].setPosition((player.getPosition().x + 25 * i) - 25, player.getPosition().y - 25);
-					window.draw(Card[hand_enemy[i] - 1]);
-				}
-				//printf("1");
-				window.display();
-				printf("hero score");
-				printf("%d", hero_score);
-				while (1) {
-					if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Z)) {
-						hand_hero.push_back(Deck.back());
-						hero_score += card_score(Deck.back());
-						Deck.pop_back();
-						if (too_more(hero_score) == 1) {
-							printf_s("\nhero is %d", hero_score);
-							printf_s("\nenemy is %d\n", enemy_score);
-							printf("hero is lose  TT \n");
-							herogetdamage();
-							for (int i = 0; i < hand_hero.size(); i++)
-							{
-								Card[hand_hero[i] - 1].setPosition((player.getPosition().x + 25 * i) - 25, player.getPosition().y + 50);
-								window.draw(Card[hand_hero[i] - 1]);
-							}
-							for (int i = 0; i < hand_enemy.size(); i++)
-							{
-								Card[hand_enemy[i] - 1].setPosition((player.getPosition().x + 25 * i) - 25, player.getPosition().y - 25);
-								window.draw(Card[hand_enemy[i] - 1]);
-
-							}
-							cl.restart();
-							while (true) {
-								Time = cl.getElapsedTime().asSeconds();
-								//cout << "kuy" << endl;
-								if (Time <= 0.5) {
-									player.setFillColor(sf::Color::Red);
-									window.draw(player);
-									//cout << "itai" << endl;
-								}
-								else {
-									player.setFillColor(sf::Color::White);
-									window.draw(player);
-									cout << "ahhhhh" << endl;
-									break;
-								}
-								window.display();
-
-							}
-							break;
-						}
-						hand_enemy.push_back(Deck.back());
-						enemy_score += card_score(Deck.back());
+			clear_card();
+			Shuffle();
+			for (int i = 0; i < Deck.size(); i++) {
+				printf("\n%d ", Deck[i]);
+			}
+			hand_hero.push_back(Deck.back());
+			hero_score += card_score(Deck.back());
+			Deck.pop_back();
+			hand_enemy.push_back(Deck.back());
+			enemy_score += card_score(Deck.back());
+			Deck.pop_back();
+			hand_hero.push_back(Deck.back());
+			hero_score += card_score(Deck.back());
+			Deck.pop_back();
+			hand_enemy.push_back(Deck.back());
+			enemy_score += card_score(Deck.back());
+			Deck.pop_back();
+			printf("\nhand hero\n");
+			for (int i = 0; i < hand_hero.size(); i++)
+			{
+				Card[hand_hero[i] - 1].setPosition((player.getPosition().x + 25 * i) - 25, player.getPosition().y + 50);
+				window.draw(Card[hand_hero[i] - 1]);
+			}
+			for (int i = 0; i < hand_hero.size(); i++) {
+				printf(" %d", hand_hero[i]);
+			}
+			for (int i = 0; i < hand_enemy.size(); i++)
+			{
+				Card[hand_enemy[i] - 1].setPosition((player.getPosition().x + 25 * i) - 25, player.getPosition().y - 25);
+				window.draw(Card[hand_enemy[i] - 1]);
+			}
+			//printf("1");
+			window.display();
+			printf("hero score");
+			printf("%d", hero_score);
+			while (1) {
+				if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Z)) {
+					hand_hero.push_back(Deck.back());
+					hero_score += card_score(Deck.back());
+					Deck.pop_back();
+					if (too_more(hero_score) == 1) {
+						printf_s("\nhero is %d", hero_score);
+						printf_s("\nenemy is %d\n", enemy_score);
+						printf("hero is lose  TT \n");
+						herogetdamage();
 						for (int i = 0; i < hand_hero.size(); i++)
 						{
 							Card[hand_hero[i] - 1].setPosition((player.getPosition().x + 25 * i) - 25, player.getPosition().y + 50);
@@ -692,47 +704,80 @@ int main() {
 							window.draw(Card[hand_enemy[i] - 1]);
 
 						}
-						//printf("4");
-						window.display();
-						Deck.pop_back();
-						if (too_more(enemy_score) == 1) {
-							printf_s("\nhero is %d", hero_score);
-							printf_s("\nenemy is %d\n", enemy_score);
-							printf("hero is winner  ^^ \n");
-							Enemyvec[enemynum].takedamage(herodamage);
-							for (int i = 0; i < hand_hero.size(); i++)
-							{
-								Card[hand_hero[i] - 1].setPosition((player.getPosition().x + 25 * i) - 25, player.getPosition().y + 50);
-								window.draw(Card[hand_hero[i] - 1]);
+						cl.restart();
+						while (true) {
+							Time = cl.getElapsedTime().asSeconds();
+							//cout << "kuy" << endl;
+							if (Time <= 0.5) {
+								player.setFillColor(sf::Color::Red);
+								window.draw(player);
+								//cout << "itai" << endl;
 							}
-							for (int i = 0; i < hand_enemy.size(); i++)
-							{
-								Card[hand_enemy[i] - 1].setPosition((player.getPosition().x + 25 * i) - 25, player.getPosition().y - 25);
-								window.draw(Card[hand_enemy[i] - 1]);
-
+							else {
+								player.setFillColor(sf::Color::White);
+								window.draw(player);
+								cout << "ahhhhh" << endl;
+								break;
 							}
-							//printf("5");
 							window.display();
-							cl.restart();
-							while (true) {
-								Time = cl.getElapsedTime().asSeconds();
-								//cout << "kuy" << endl;
-								if (Time <= 0.5) {
-									Enemyvec[enemynum].Enemy.setFillColor(sf::Color::Red);
-									Enemyvec[enemynum].draw(window);
-									//cout << "itai" << endl;
-								}
-								else {
-									Enemyvec[enemynum].Enemy.setFillColor(sf::Color::White);
-									Enemyvec[enemynum].draw(window);
-									cout << "ahhhhh" << endl;
-									break;
-								}
-								window.display();
-							}
-							//printf("6");
-						break;
+
 						}
+						break;
+					}
+					hand_enemy.push_back(Deck.back());
+					enemy_score += card_score(Deck.back());
+					for (int i = 0; i < hand_hero.size(); i++)
+					{
+						Card[hand_hero[i] - 1].setPosition((player.getPosition().x + 25 * i) - 25, player.getPosition().y + 50);
+						window.draw(Card[hand_hero[i] - 1]);
+					}
+					for (int i = 0; i < hand_enemy.size(); i++)
+					{
+						Card[hand_enemy[i] - 1].setPosition((player.getPosition().x + 25 * i) - 25, player.getPosition().y - 25);
+						window.draw(Card[hand_enemy[i] - 1]);
+
+					}
+					//printf("4");
+					window.display();
+					Deck.pop_back();
+					if (too_more(enemy_score) == 1) {
+						printf_s("\nhero is %d", hero_score);
+						printf_s("\nenemy is %d\n", enemy_score);
+						printf("hero is winner  ^^ \n");
+						Enemyvec[enemynum].takedamage(herodamage);
+						for (int i = 0; i < hand_hero.size(); i++)
+						{
+							Card[hand_hero[i] - 1].setPosition((player.getPosition().x + 25 * i) - 25, player.getPosition().y + 50);
+							window.draw(Card[hand_hero[i] - 1]);
+						}
+						for (int i = 0; i < hand_enemy.size(); i++)
+						{
+							Card[hand_enemy[i] - 1].setPosition((player.getPosition().x + 25 * i) - 25, player.getPosition().y - 25);
+							window.draw(Card[hand_enemy[i] - 1]);
+
+						}
+						//printf("5");
+						window.display();
+						cl.restart();
+						while (true) {
+							Time = cl.getElapsedTime().asSeconds();
+							//cout << "kuy" << endl;
+							if (Time <= 0.5) {
+								Enemyvec[enemynum].Enemy.setFillColor(sf::Color::Red);
+								Enemyvec[enemynum].draw(window);
+								//cout << "itai" << endl;
+							}
+							else {
+								Enemyvec[enemynum].Enemy.setFillColor(sf::Color::White);
+								Enemyvec[enemynum].draw(window);
+								cout << "ahhhhh" << endl;
+								break;
+							}
+							window.display();
+						}
+						//printf("6");
+						break;
+					}
 					printf("\nhand hero\n");
 					window.display();
 					printf("hero score");
@@ -753,76 +798,76 @@ int main() {
 					while (sf::Keyboard::isKeyPressed(sf::Keyboard::Z)) {}
 				}
 				////////////////////////////////////////////////////
-					if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::X)) {
-						for (int i = 0; i < hand_hero.size(); i++)
-						{
-							Card[hand_hero[i] - 1].setPosition((player.getPosition().x + 25 * i) - 25, player.getPosition().y + 50);
-							window.draw(Card[hand_hero[i] - 1]);
-						}
-						for (int i = 0; i < hand_enemy.size(); i++)
-						{
-							Card[hand_enemy[i] - 1].setPosition((player.getPosition().x + 25 * i) - 25, player.getPosition().y - 25);
-							window.draw(Card[hand_enemy[i] - 1]);
-
-						}
-						window.display();
-						fight = false;
-						printf_s("\nhero is %d", hero_score);
-						printf_s("\nenemy is %d\n", enemy_score);
-							if (hero_score == enemy_score) {
-								printf("draw  ;-; \n");
-							}
-							if (hero_score > enemy_score) {
-								printf("hero is winner  ^^ \n");
-								cl.restart();
-								while (true) {
-									Time = cl.getElapsedTime().asSeconds();
-									//cout << "kuy" << endl;
-									if (Time <= 0.5) {
-										Enemyvec[enemynum].Enemy.setFillColor(sf::Color::Red);
-										Enemyvec[enemynum].draw(window);
-										//cout << "itai" << endl;
-									}
-									else {
-										Enemyvec[enemynum].Enemy.setFillColor(sf::Color::White);
-										Enemyvec[enemynum].draw(window);
-										cout << "ahhhhh" << endl;
-										break;
-									}
-									window.display();
-								
-								}
-								Enemyvec[enemynum].takedamage(herodamage);
-							}
-							if (hero_score < enemy_score) {
-								printf("hero is lose  TT \n");
-								herogetdamage();
-								cl.restart();
-								while (true) {
-									Time = cl.getElapsedTime().asSeconds();
-									//cout << "kuy" << endl;
-									if (Time <= 0.5) {
-										player.setFillColor(sf::Color::Red);
-										window.draw(player);
-										//cout << "itai" << endl;
-									}
-									else {
-										player.setFillColor(sf::Color::White);
-										window.draw(player);
-										cout << "ahhhhh" << endl;
-										break;
-									}
-									window.display();
-
-								}
-							}
-						break;
+				if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::X)) {
+					for (int i = 0; i < hand_hero.size(); i++)
+					{
+						Card[hand_hero[i] - 1].setPosition((player.getPosition().x + 25 * i) - 25, player.getPosition().y + 50);
+						window.draw(Card[hand_hero[i] - 1]);
 					}
+					for (int i = 0; i < hand_enemy.size(); i++)
+					{
+						Card[hand_enemy[i] - 1].setPosition((player.getPosition().x + 25 * i) - 25, player.getPosition().y - 25);
+						window.draw(Card[hand_enemy[i] - 1]);
+
+					}
+					window.display();
+					fight = false;
+					printf_s("\nhero is %d", hero_score);
+					printf_s("\nenemy is %d\n", enemy_score);
+					if (hero_score == enemy_score) {
+						printf("draw  ;-; \n");
+					}
+					if (hero_score > enemy_score) {
+						printf("hero is winner  ^^ \n");
+						cl.restart();
+						while (true) {
+							Time = cl.getElapsedTime().asSeconds();
+							//cout << "kuy" << endl;
+							if (Time <= 0.5) {
+								Enemyvec[enemynum].Enemy.setFillColor(sf::Color::Red);
+								Enemyvec[enemynum].draw(window);
+								//cout << "itai" << endl;
+							}
+							else {
+								Enemyvec[enemynum].Enemy.setFillColor(sf::Color::White);
+								Enemyvec[enemynum].draw(window);
+								cout << "ahhhhh" << endl;
+								break;
+							}
+							window.display();
+
+						}
+						Enemyvec[enemynum].takedamage(herodamage);
+					}
+					if (hero_score < enemy_score) {
+						printf("hero is lose  TT \n");
+						herogetdamage();
+						cl.restart();
+						while (true) {
+							Time = cl.getElapsedTime().asSeconds();
+							//cout << "kuy" << endl;
+							if (Time <= 0.5) {
+								player.setFillColor(sf::Color::Red);
+								window.draw(player);
+								//cout << "itai" << endl;
+							}
+							else {
+								player.setFillColor(sf::Color::White);
+								window.draw(player);
+								cout << "ahhhhh" << endl;
+								break;
+							}
+							window.display();
+
+						}
+					}
+					break;
 				}
-				clear_card();
-				enemy_score = 0;
-				hero_score = 0;
-				fight = false;
+			}
+			clear_card();
+			enemy_score = 0;
+			hero_score = 0;
+			fight = false;
 		}
 		for (int i = 0; i < hand_hero.size(); i++)
 		{
@@ -839,7 +884,6 @@ int main() {
 		{
 			Card[i].setPosition(((player_posx * 50) + 25 * i) - 25, (player_posy * 50) - 25);
 			window.draw(Card[i]);
-
 		}
 		*/
 		//window.draw(playercard);
