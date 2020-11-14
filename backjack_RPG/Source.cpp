@@ -53,6 +53,8 @@ int herohp;
 int sheildnum;
 std::vector <enemy> Enemyvec;
 int coin = 0;
+
+
 void ResetGrid()
 {
 
@@ -321,7 +323,6 @@ int main() {
 	herodamage = 1;
 	herohp = 3;
 	sheildnum = 1;
-	// position
 
 	// door
 	sf::RectangleShape Door(sf::Vector2f(50.0f, 50.0f));
@@ -359,6 +360,24 @@ int main() {
 			Card.push_back(card);
 		}
 	}
+
+
+
+	// healposion
+	std::vector<sf::RectangleShape> healposion;
+	sf::RectangleShape h1(sf::Vector2f(50.0f, 50.0f));
+	h1.setOrigin(0.f, 0.f);
+	h1.setPosition(300.0f + shiftx, 350.0f + shifty);
+	h1.setTexture(&Texture);
+	h1.setTextureRect(sf::IntRect(x_size * 18.00000, y_size * 25.00000, x_size, y_size));
+	healposion.push_back(h1);
+	// healposion
+	std::vector<sf::RectangleShape> Coinitem;
+
+
+	//damgeitem
+	std::vector<sf::RectangleShape> damageitem;
+
 
 
 	//std::vector <enemy> Enemyvec;
@@ -466,6 +485,15 @@ int main() {
 			break;
 		}
 
+
+		for (int i = 0; i < healposion.size(); i++) {
+			if (player.getGlobalBounds().intersects(healposion[i].getGlobalBounds())) {
+				herohp += 3;
+				healposion.erase(healposion.begin() + i);
+			}
+		}
+
+
 		for (int i = 0; i < Enemyvec.size(); i++) {
 			if (player.getGlobalBounds().intersects(Enemyvec[i].Enemy.getGlobalBounds()) && (Enemyvec[i].GetHp()) > 0) {
 				if (walk == 1) {
@@ -505,9 +533,16 @@ int main() {
 			window.draw(Wall[i]);
 		}
 		for (int i = 0; i < Enemyvec.size(); i++) {
-			if ((Enemyvec[i].GetHp()) > 0) {
-				Enemyvec[i].draw(window);
+			if ((Enemyvec[i].GetHp()) <= 0) {
+				Enemyvec.erase(Enemyvec.begin() + i);
 			}
+		}
+		for (int i = 0; i < Enemyvec.size(); i++) {
+			Enemyvec[i].draw(window);
+		}
+
+		for (int i = 0; i < healposion.size(); i++) {
+			window.draw(healposion[i]);
 		}
 		/// Blood
 		for (int i = 0; i < Enemyvec.size(); i++) {
@@ -640,7 +675,7 @@ int main() {
 		NUM.setOrigin(0.f, 0.f);
 		NUM.setPosition(800, shifty + 80);
 		NUM.setTexture(&Texture);
-		NUM.setTextureRect(sf::IntRect(x_size* (19.0000000 + coin), y_size * 29.0000000, x_size, y_size));
+		NUM.setTextureRect(sf::IntRect(x_size * (19.0000000 + coin), y_size * 29.0000000, x_size, y_size));
 		window.draw(NUM);
 		/// UI //////////////////////////////////////////////////////////////
 		if (fight == true) {
