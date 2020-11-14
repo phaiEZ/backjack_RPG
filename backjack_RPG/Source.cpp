@@ -51,8 +51,9 @@ float Time;
 int herodamage;
 int herohp;
 int sheildnum;
+int coin;
+
 std::vector <enemy> Enemyvec;
-int coin = 0;
 
 
 void ResetGrid()
@@ -320,9 +321,11 @@ int main() {
 	player.setTexture(&Texture);
 	//player.setFillColor(sf::Color::Red);
 	player.setTextureRect(sf::IntRect(x_size * 25, y_size * 0, x_size, y_size));
+
 	herodamage = 1;
 	herohp = 3;
 	sheildnum = 1;
+	coin = 0;
 
 	// door
 	sf::RectangleShape Door(sf::Vector2f(50.0f, 50.0f));
@@ -362,23 +365,41 @@ int main() {
 	}
 
 
-
 	// healposion
 	std::vector<sf::RectangleShape> healposion;
-	sf::RectangleShape h1(sf::Vector2f(50.0f, 50.0f));
-	h1.setOrigin(0.f, 0.f);
-	h1.setPosition(300.0f + shiftx, 350.0f + shifty);
-	h1.setTexture(&Texture);
-	h1.setTextureRect(sf::IntRect(x_size * 18.00000, y_size * 25.00000, x_size, y_size));
-	healposion.push_back(h1);
-	// healposion
-	std::vector<sf::RectangleShape> Coinitem;
+	sf::RectangleShape item(sf::Vector2f(50.0f, 50.0f));
+	item.setOrigin(0.f, 0.f);
+	item.setPosition(300.0f + shiftx, 350.0f + shifty);
+	item.setTexture(&Texture);
+	item.setTextureRect(sf::IntRect(x_size * 18.00000, y_size * 25.00000, x_size, y_size));
+	healposion.push_back(item);
 
+
+	// coin
+	std::vector<sf::RectangleShape> Coinitem;
+	item.setOrigin(0.f, 0.f);
+	item.setPosition(350.0f + shiftx, 350.0f + shifty);
+	item.setTexture(&Texture);
+	item.setTextureRect(sf::IntRect(x_size * 9.00000, y_size * 26.00000, x_size, y_size));
+	Coinitem.push_back(item);
 
 	//damgeitem
 	std::vector<sf::RectangleShape> damageitem;
+	item.setOrigin(0.f, 0.f);
+	item.setFillColor(sf::Color::Blue);
+	item.setPosition(400.0f + shiftx, 350.0f + shifty);
+	item.setTexture(&Texture);
+	item.setTextureRect(sf::IntRect(x_size * 0.00000, y_size * 31.00000, x_size, y_size));
+	damageitem.push_back(item);
 
-
+	// shield
+	std::vector<sf::RectangleShape> shielditem;
+	item.setOrigin(0.f, 0.f);
+	item.setFillColor(sf::Color::White);
+	item.setPosition(450.0f + shiftx, 350.0f + shifty);
+	item.setTexture(&Texture);
+	item.setTextureRect(sf::IntRect(x_size * 5.00000, y_size * 26.00000, x_size, y_size));
+	shielditem.push_back(item);
 
 	//std::vector <enemy> Enemyvec;
 
@@ -488,8 +509,29 @@ int main() {
 
 		for (int i = 0; i < healposion.size(); i++) {
 			if (player.getGlobalBounds().intersects(healposion[i].getGlobalBounds())) {
-				herohp += 3;
+				herohp = 3;
 				healposion.erase(healposion.begin() + i);
+			}
+		}
+
+		for (int i = 0; i < Coinitem.size(); i++) {
+			if (player.getGlobalBounds().intersects(Coinitem[i].getGlobalBounds())) {
+				coin += 1;
+				Coinitem.erase(Coinitem.begin() + i);
+			}
+		}
+
+		for (int i = 0; i < damageitem.size(); i++) {
+			if (player.getGlobalBounds().intersects(damageitem[i].getGlobalBounds())) {
+				herodamage += 1;
+				damageitem.erase(damageitem.begin() + i);
+			}
+		}
+
+		for (int i = 0; i < shielditem.size(); i++) {
+			if (player.getGlobalBounds().intersects(shielditem[i].getGlobalBounds())) {
+				sheildnum += 1;
+				shielditem.erase(shielditem.begin() + i);
 			}
 		}
 
@@ -541,9 +583,24 @@ int main() {
 			Enemyvec[i].draw(window);
 		}
 
+
+
+
 		for (int i = 0; i < healposion.size(); i++) {
 			window.draw(healposion[i]);
 		}
+
+		for (int i = 0; i < Coinitem.size(); i++) {
+			window.draw(Coinitem[i]);
+		}
+
+		for (int i = 0; i < damageitem.size(); i++) {
+			window.draw(damageitem[i]);
+		}
+		for (int i = 0; i < shielditem.size(); i++) {
+			window.draw(shielditem[i]);
+		}
+		
 		/// Blood
 		for (int i = 0; i < Enemyvec.size(); i++) {
 			if ((Enemyvec[i].GetHp()) < Enemyvec[i].GetmaxHp() && Enemyvec[i].GetHp() > 0) {
