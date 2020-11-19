@@ -9,6 +9,7 @@
 #include <vector>
 #include"card.h"
 #include "enemy.h"
+#include <stdio.h>
 using namespace std;
 
 #define GRID_WIDTH 11
@@ -151,6 +152,22 @@ int randommap() {
 	return 0;
 }
 ////////////////////////////////////////////////////////////
+
+int randoM(int min, int max) {
+	a = rand();
+	a = (a % max) + 1;
+	while (1) {
+		if (a < min) {
+			a = rand();
+			a = (a % max) + 1;
+		}
+		else {
+			break;
+		}
+	}
+	return(a);
+}
+
 
 int pick_card() {
 	srand(time(NULL));
@@ -300,7 +317,7 @@ int winer(int a, int b) {
 	}
 }
 int main() {
-	randommap();
+	srand(time(NULL));
 	sf::RenderWindow window(sf::VideoMode(550 + shiftx, 550 + shifty), "Black_jack_rpg0.1", sf::Style::Close | sf::Style::Fullscreen);
 	window.setFramerateLimit(30);
 	sf::Texture Texture;
@@ -364,58 +381,17 @@ int main() {
 		}
 	}
 
-
-	// healposion
+	std::vector<sf::RectangleShape> shielditem;
+	std::vector<sf::RectangleShape> damageitem;
+	std::vector<sf::RectangleShape> Coinitem;
 	std::vector<sf::RectangleShape> healposion;
 	sf::RectangleShape item(sf::Vector2f(50.0f, 50.0f));
-	item.setOrigin(0.f, 0.f);
-	item.setPosition(300.0f + shiftx, 350.0f + shifty);
-	item.setTexture(&Texture);
-	item.setTextureRect(sf::IntRect(x_size * 18.00000, y_size * 25.00000, x_size, y_size));
-	healposion.push_back(item);
+	// healposion
 
-
-	// coin
-	std::vector<sf::RectangleShape> Coinitem;
-	item.setOrigin(0.f, 0.f);
-	item.setPosition(350.0f + shiftx, 350.0f + shifty);
-	item.setTexture(&Texture);
-	item.setTextureRect(sf::IntRect(x_size * 9.00000, y_size * 26.00000, x_size, y_size));
-	Coinitem.push_back(item);
-
-	//damgeitem
-	std::vector<sf::RectangleShape> damageitem;
-	item.setOrigin(0.f, 0.f);
-	item.setFillColor(sf::Color::Blue);
-	item.setPosition(400.0f + shiftx, 350.0f + shifty);
-	item.setTexture(&Texture);
-	item.setTextureRect(sf::IntRect(x_size * 0.00000, y_size * 31.00000, x_size, y_size));
-	damageitem.push_back(item);
-
-	// shield
-	std::vector<sf::RectangleShape> shielditem;
-	item.setOrigin(0.f, 0.f);
-	item.setFillColor(sf::Color::White);
-	item.setPosition(450.0f + shiftx, 350.0f + shifty);
-	item.setTexture(&Texture);
-	item.setTextureRect(sf::IntRect(x_size * 5.00000, y_size * 26.00000, x_size, y_size));
-	shielditem.push_back(item);
 
 	//std::vector <enemy> Enemyvec;
-
-	enemy x(&Texture, 2, 2, 150 + shiftx, 100 + shifty);
-	x.Enemy.setTexture(&Texture);
-	Enemyvec.push_back(x);
-
-	enemy a(&Texture, 1, 3, 50 + shiftx, 250 + shifty);
-	a.Enemy.setTexture(&Texture);
-	Enemyvec.push_back(a);
-
-	enemy b(&Texture, 3, 4, 350 + shiftx, 450 + shifty);
-	b.Enemy.setTexture(&Texture);
-	Enemyvec.push_back(b);
-
-
+	randommap();
+	Enemyvec.push_back(enemy(&Texture, 2, 1, 150 + shiftx, 100 + shifty));
 	///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	while (window.isOpen()) {
 		window.clear();
@@ -431,7 +407,7 @@ int main() {
 				break;
 			case sf::Event::TextEntered:
 				if (evnt.text.unicode < 128) {
-					printf("%c", evnt.text.unicode);
+					//printf("%c", evnt.text.unicode);
 				}
 			}
 		}
@@ -501,6 +477,7 @@ int main() {
 		if (player.getGlobalBounds().intersects(Door.getGlobalBounds()) && sf::Keyboard::isKeyPressed(sf::Keyboard::Key::F)) {
 			player.setPosition(50.0f + shiftx, 50.0f + shifty);
 			randommap();
+			//randomenemy/////
 		}
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Escape)) {
 			break;
@@ -576,6 +553,40 @@ int main() {
 		}
 		for (int i = 0; i < Enemyvec.size(); i++) {
 			if ((Enemyvec[i].GetHp()) <= 0) {
+				int x;
+				x = randoM(1, 4);
+				if (x == 1) {
+					item.setOrigin(0.f, 0.f);//healposion
+					item.setPosition(Enemyvec[i].Enemy.getPosition().x, Enemyvec[i].Enemy.getPosition().y);
+					item.setTexture(&Texture);
+					item.setFillColor(sf::Color::Red);
+					item.setTextureRect(sf::IntRect(x_size * 18.00000, y_size * 25.00000, x_size, y_size));
+					healposion.push_back(item);
+				}
+				else if (x == 2) {
+					item.setOrigin(0.f, 0.f);// coin
+					item.setPosition(Enemyvec[i].Enemy.getPosition().x, Enemyvec[i].Enemy.getPosition().y);
+					item.setTexture(&Texture);
+					item.setFillColor(sf::Color::Yellow );
+					item.setTextureRect(sf::IntRect(x_size * 9.00000, y_size * 26.00000, x_size, y_size));
+					Coinitem.push_back(item);
+				}
+				else if (x == 3) {
+					item.setOrigin(0.f, 0.f);//damgeitem
+					item.setFillColor(sf::Color::Blue);
+					item.setPosition(Enemyvec[i].Enemy.getPosition().x, Enemyvec[i].Enemy.getPosition().y);
+					item.setTexture(&Texture);
+					item.setTextureRect(sf::IntRect(x_size * 0.00000, y_size * 31.00000, x_size, y_size));
+					damageitem.push_back(item);
+				}
+				else if (x == 4) {
+					item.setOrigin(0.f, 0.f);// shield
+					item.setFillColor(sf::Color::White);
+					item.setPosition(Enemyvec[i].Enemy.getPosition().x, Enemyvec[i].Enemy.getPosition().y);
+					item.setTexture(&Texture);
+					item.setTextureRect(sf::IntRect(x_size * 5.00000, y_size * 26.00000, x_size, y_size));
+					shielditem.push_back(item);
+				}
 				Enemyvec.erase(Enemyvec.begin() + i);
 			}
 		}
@@ -726,7 +737,7 @@ int main() {
 		UI.setPosition(865, shifty + 75);
 		UI.setTexture(&Texture);
 		UI.setFillColor(sf::Color::Yellow);
-		UI.setTextureRect(sf::IntRect(x_size * 7.0000000, y_size * 24.0000000, x_size, y_size));
+		UI.setTextureRect(sf::IntRect(x_size * 9.0000000, y_size * 26.0000000, x_size, y_size));
 		window.draw(UI);
 
 		NUM.setOrigin(0.f, 0.f);

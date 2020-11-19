@@ -4,12 +4,9 @@
 enemy::enemy(sf::Texture *texture,int mostertype, int hpmoster ,int enemyposx , int enemyposy){
 	Enemy.setSize(sf::Vector2f(50.0f, 50.0f));
 	Enemy.setOrigin(0.f, 0.f);
-	sf::Texture texta;
-	texta = *texture;
-	sf::Vector2u textureSize = texta.getSize();
-	float x_size = textureSize.x / 32.000000;
-	float y_size = textureSize.y / 32.000000;
-	Enemy.setTexture(&texta);
+	float x_size = texture->getSize().x / 32.000000;
+	float y_size = texture->getSize().y / 32.000000;
+	Enemy.setTexture(texture);
 	if (mostertype == 1) {
 		Enemy.setTextureRect(sf::IntRect(x_size * 29, y_size * 8, x_size, y_size));
 	}
