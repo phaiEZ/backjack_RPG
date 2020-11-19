@@ -22,6 +22,8 @@ using namespace std;
 float shiftx = 200;
 float shifty = 100;
 
+bool isdraw = false;
+
 int enemy_card;
 int hero_card;
 int Card[52];
@@ -390,8 +392,9 @@ int main() {
 
 
 	//std::vector <enemy> Enemyvec;
+	
 	randommap();
-	Enemyvec.push_back(enemy(&Texture, 2, 1, 150 + shiftx, 100 + shifty));
+
 	///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	while (window.isOpen()) {
 		window.clear();
@@ -476,6 +479,7 @@ int main() {
 		}
 		if (player.getGlobalBounds().intersects(Door.getGlobalBounds()) && sf::Keyboard::isKeyPressed(sf::Keyboard::Key::F)) {
 			player.setPosition(50.0f + shiftx, 50.0f + shifty);
+			isdraw = false;
 			randommap();
 			//randomenemy/////
 		}
@@ -551,6 +555,15 @@ int main() {
 		for (int i = 0; i < Wall.size(); i++) {
 			window.draw(Wall[i]);
 		}
+
+		if (isdraw == false) {
+			int ranx = randoM(1, 8);
+			int rany = randoM(1, 9);
+			Enemyvec.push_back(enemy(&Texture, 2, 1, 50 * ranx + shiftx, 50 * rany + shifty));
+			isdraw = true;
+		}
+		
+
 		for (int i = 0; i < Enemyvec.size(); i++) {
 			if ((Enemyvec[i].GetHp()) <= 0) {
 				int x;
