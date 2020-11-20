@@ -472,6 +472,7 @@ int main() {
 		}
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::R)) {
 			player.setPosition(50.0f + shiftx, 50.0f + shifty);
+			isdraw = false;
 			randommap();
 			while (sf::Keyboard::isKeyPressed(sf::Keyboard::R)) {
 			}
@@ -555,7 +556,6 @@ int main() {
 		for (int i = 0; i < Wall.size(); i++) {
 			window.draw(Wall[i]);
 		}
-
 		if (isdraw == false) {
 			int ranx = randoM(1, 8);
 			int rany = randoM(1, 9);
@@ -606,10 +606,6 @@ int main() {
 		for (int i = 0; i < Enemyvec.size(); i++) {
 			Enemyvec[i].draw(window);
 		}
-
-
-
-
 		for (int i = 0; i < healposion.size(); i++) {
 			window.draw(healposion[i]);
 		}
