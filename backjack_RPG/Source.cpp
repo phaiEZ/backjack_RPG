@@ -294,8 +294,8 @@ void ResizeView(const sf::RenderWindow& window, sf::View& view)
 }
 
 void herogetdamage() {
-	if (sheildnum >= 1) {
-		sheildnum = sheildnum - 1;
+	if(sheildnum >= 1) {
+			sheildnum = sheildnum - 1;
 	}
 	else {
 		herohp = herohp - 1;
@@ -557,9 +557,16 @@ int main() {
 			window.draw(Wall[i]);
 		}
 		if (isdraw == false) {
-			int ranx = randoM(1, 8);
-			int rany = randoM(1, 9);
-			Enemyvec.push_back(enemy(&Texture, 2, 1, 50 * ranx + shiftx, 50 * rany + shifty));
+			int rangen = randoM(1, level);
+			for (size_t i = 0; i < rangen; i++)
+			{
+				int ranx = randoM(1, 9);
+				int rany = randoM(1, 9);
+				int ranEn = randoM(1, 3);
+				int ranblood = randoM(1, level);
+				Enemyvec.push_back(enemy(&Texture, ranEn, ranblood, 50 * ranx + shiftx, 50 * rany + shifty));
+			}
+			
 			isdraw = true;
 		}
 		
@@ -567,8 +574,8 @@ int main() {
 		for (int i = 0; i < Enemyvec.size(); i++) {
 			if ((Enemyvec[i].GetHp()) <= 0) {
 				int x;
-				x = randoM(1, 4);
-				if (x == 1) {
+				x = randoM(1, 100);
+				if (x > 80 && x <= 100) {
 					item.setOrigin(0.f, 0.f);//healposion
 					item.setPosition(Enemyvec[i].Enemy.getPosition().x, Enemyvec[i].Enemy.getPosition().y);
 					item.setTexture(&Texture);
@@ -576,7 +583,7 @@ int main() {
 					item.setTextureRect(sf::IntRect(x_size * 18.00000, y_size * 25.00000, x_size, y_size));
 					healposion.push_back(item);
 				}
-				else if (x == 2) {
+				else if (x > 40 && x <= 80) {
 					item.setOrigin(0.f, 0.f);// coin
 					item.setPosition(Enemyvec[i].Enemy.getPosition().x, Enemyvec[i].Enemy.getPosition().y);
 					item.setTexture(&Texture);
@@ -584,7 +591,7 @@ int main() {
 					item.setTextureRect(sf::IntRect(x_size * 9.00000, y_size * 26.00000, x_size, y_size));
 					Coinitem.push_back(item);
 				}
-				else if (x == 3) {
+				else if (x > 20 && x <= 40) {
 					item.setOrigin(0.f, 0.f);//damgeitem
 					item.setFillColor(sf::Color::Blue);
 					item.setPosition(Enemyvec[i].Enemy.getPosition().x, Enemyvec[i].Enemy.getPosition().y);
@@ -592,7 +599,7 @@ int main() {
 					item.setTextureRect(sf::IntRect(x_size * 0.00000, y_size * 31.00000, x_size, y_size));
 					damageitem.push_back(item);
 				}
-				else if (x == 4) {
+				else if (x > 0 && x <= 20) {
 					item.setOrigin(0.f, 0.f);// shield
 					item.setFillColor(sf::Color::White);
 					item.setPosition(Enemyvec[i].Enemy.getPosition().x, Enemyvec[i].Enemy.getPosition().y);
