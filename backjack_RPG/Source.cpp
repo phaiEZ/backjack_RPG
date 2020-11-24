@@ -558,13 +558,30 @@ int main() {
 		}
 		if (isdraw == false) {
 			int rangen = randoM(1, level);
-			for (size_t i = 0; i < rangen; i++)
-			{
-				int ranx = randoM(1, 9);
-				int rany = randoM(1, 9);
-				int ranEn = randoM(1, 3);
-				int ranblood = randoM(1, level);
-				Enemyvec.push_back(enemy(&Texture, ranEn, ranblood, 50 * ranx + shiftx, 50 * rany + shifty));
+			for (int i = 0; i < rangen; i++){
+				while (true){
+					int ranx = randoM(1, 9);
+					int rany = randoM(1, 9);
+					int ranEn = randoM(1, 3);
+					int ranblood = randoM(1, level);
+					Enemyvec.push_back(enemy(&Texture, ranEn, ranblood, 50 * ranx + shiftx, 50 * rany + shifty));
+					bool tub = false;
+					for (int j = 0; j < Wall.size(); j++) {
+						if (Enemyvec.back().Enemy.getGlobalBounds().intersects(Wall[j].getGlobalBounds())) {
+							tub = true;
+						}
+						if (Enemyvec.back().Enemy.getGlobalBounds().intersects(Wall[j].getGlobalBounds())) {
+							tub = true;
+						}
+					}
+					if (tub == false) {
+						break;
+					}
+					else {
+						Enemyvec.pop_back();
+					}
+				}
+
 			}
 			
 			isdraw = true;
