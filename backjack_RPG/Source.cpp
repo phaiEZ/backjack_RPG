@@ -55,6 +55,7 @@ int herodamage;
 int herohp;
 int sheildnum;
 int coin;
+int levelten = 0;
 
 std::vector <enemy> Enemyvec;
 
@@ -298,7 +299,7 @@ void herogetdamage() {
 	if(sheildnum >= 1) {
 			sheildnum = sheildnum - 1;
 	}
-	else {
+	else if (herohp > 0){
 		herohp = herohp - 1;
 	}
 }
@@ -321,7 +322,7 @@ int winer(int a, int b) {
 }
 int main() {
 	srand(time(NULL));
-	sf::RenderWindow window(sf::VideoMode(550 + shiftx, 550 + shifty), "Black_jack_rpg0.1", sf::Style::Close ); // sf::Style::Fullscreen
+	sf::RenderWindow window(sf::VideoMode(550 + shiftx, 550 + shifty), "Black_jack_rpg0.1", sf::Style::Close | sf::Style::Fullscreen); 
 	window.setFramerateLimit(30);
 	sf::Texture Texture;
 	Texture.loadFromFile("new2.png");
@@ -554,20 +555,23 @@ int main() {
 				}
 			}
 		}
+
 		for (int i = 0; i < Wall.size(); i++) {
 			window.draw(Wall[i]);
 		}
+
+		bool tub = false;
 		if (isdraw == false) {
 			window.display();
-			int rangen = randoM(1, level);
+			int rangen = randoM(1, 1 + (level / 2));
 			for (int i = 0; i < rangen; i++){
-				while (true){
+				while (1){
 					int ranx = randoM(1, 9);
 					int rany = randoM(1, 9);
 					int ranEn = randoM(1, 3);
-					int ranblood = randoM(1, level);
+					int ranblood = randoM(1, 1 + (level/2));
 					Enemyvec.push_back(enemy(&Texture, ranEn, ranblood, 50 * ranx + shiftx, 50 * rany + shifty));
-					bool tub = false;
+					tub = false;
 					for (int j = 0; j < Wall.size(); j++) {
 						if (Enemyvec.back().Enemy.getGlobalBounds().intersects(Wall[j].getGlobalBounds())) {
 							tub = true;
@@ -578,25 +582,46 @@ int main() {
 							tub = true;
 						}
 					}
-					if (Enemyvec.back().Enemy.getGlobalBounds().intersects(Door.getGlobalBounds())) {
-						tub = true;
-					}
-					if (Enemyvec.back().Enemy.getGlobalBounds().intersects(player.getGlobalBounds())) {
-						tub = true;
-					}
 					if (tub == false) {
+						printf("*");
 						break;
 					}
 					else {
-						printf("*");
 						Enemyvec.pop_back();
 					}
 				}
-
 			}
 			isdraw = true;
 		}
 		
+		for (int i = 0; i < Enemyvec.size(); i++) {
+			for (int j = 0; j < Wall.size(); j++) {
+				if (Enemyvec[i].Enemy.getGlobalBounds().intersects(Wall[j].getGlobalBounds())) {
+					Enemyvec.erase(Enemyvec.begin() + i);
+					int ranx = randoM(1, 9);
+					int rany = randoM(1, 9);
+					int ranEn = randoM(1, 3);
+					int ranblood = randoM(1, level);
+					Enemyvec.push_back(enemy(&Texture, ranEn, ranblood, 50 * ranx + shiftx, 50 * rany + shifty));
+				}
+				if (Enemyvec[i].Enemy.getGlobalBounds().intersects(Door.getGlobalBounds())) {
+					Enemyvec.erase(Enemyvec.begin() + i);
+					int ranx = randoM(1, 9);
+					int rany = randoM(1, 9);
+					int ranEn = randoM(1, 3);
+					int ranblood = randoM(1, level);
+					Enemyvec.push_back(enemy(&Texture, ranEn, ranblood, 50 * ranx + shiftx, 50 * rany + shifty));
+				}
+				if (Enemyvec[i].Enemy.getGlobalBounds().intersects(player.getGlobalBounds())) {
+					Enemyvec.erase(Enemyvec.begin() + i);
+					int ranx = randoM(1, 9);
+					int rany = randoM(1, 9);
+					int ranEn = randoM(1, 3);
+					int ranblood = randoM(1, level);
+					Enemyvec.push_back(enemy(&Texture, ranEn, ranblood, 50 * ranx + shiftx, 50 * rany + shifty));
+				}
+			}
+		}
 
 		for (int i = 0; i < Enemyvec.size(); i++) {
 			if ((Enemyvec[i].GetHp()) <= 0) {
@@ -717,6 +742,9 @@ int main() {
 		NUM.setTextureRect(sf::IntRect(x_size * (19.0000000 + sheildnum), y_size * 29.0000000, x_size, y_size));
 		window.draw(NUM);
 
+
+
+		///level//////////////////////////////////////////////
 		sf::RectangleShape text(sf::Vector2f(100.0f, 100.0f));
 		text.setOrigin(0.f, 0.f);
 		text.setPosition(250, 0);
@@ -750,19 +778,22 @@ int main() {
 
 
 		sf::RectangleShape textNUM(sf::Vector2f(100.0f, 100.0f));
+		if ((level / 10) > 0){
+			textNUM.setOrigin(0.f, 0.f);
+			textNUM.setPosition(550, 0);
+			textNUM.setTexture(&Texture);
+			textNUM.setTextureRect(sf::IntRect(x_size* (19.0000000 + (level / 10)), y_size * 29.0000000, x_size, y_size));
+			window.draw(textNUM);
+		}
+
 		textNUM.setOrigin(0.f, 0.f);
 		textNUM.setPosition(600, 0);
 		textNUM.setTexture(&Texture);
-		textNUM.setTextureRect(sf::IntRect(x_size* (19.0000000 + level), y_size * 29.0000000, x_size, y_size));
+		textNUM.setTextureRect(sf::IntRect(x_size* (19.0000000 + (level % 10)), y_size * 29.0000000, x_size, y_size));
 		window.draw(textNUM);
 
-
-
-
-
-
-
-
+		
+///level//////////////////////////////////////////////
 		UI.setOrigin(0.f, 0.f);
 		UI.setPosition(865, shifty);
 		UI.setTexture(&Texture);
