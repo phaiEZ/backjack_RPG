@@ -146,6 +146,7 @@ void PrintGrid()
 
 int randommap() {
 	while (not wall_location.empty()) wall_location.pop_back();
+	while (not Enemyvec.empty()) Enemyvec.pop_back();
 	srand(time(NULL));
 	ResetGrid();
 	Visit(1, 1);
@@ -320,7 +321,7 @@ int winer(int a, int b) {
 }
 int main() {
 	srand(time(NULL));
-	sf::RenderWindow window(sf::VideoMode(550 + shiftx, 550 + shifty), "Black_jack_rpg0.1", sf::Style::Close | sf::Style::Fullscreen);
+	sf::RenderWindow window(sf::VideoMode(550 + shiftx, 550 + shifty), "Black_jack_rpg0.1", sf::Style::Close ); // sf::Style::Fullscreen
 	window.setFramerateLimit(30);
 	sf::Texture Texture;
 	Texture.loadFromFile("new2.png");
@@ -557,6 +558,7 @@ int main() {
 			window.draw(Wall[i]);
 		}
 		if (isdraw == false) {
+			window.display();
 			int rangen = randoM(1, level);
 			for (int i = 0; i < rangen; i++){
 				while (true){
@@ -570,20 +572,28 @@ int main() {
 						if (Enemyvec.back().Enemy.getGlobalBounds().intersects(Wall[j].getGlobalBounds())) {
 							tub = true;
 						}
-						if (Enemyvec.back().Enemy.getGlobalBounds().intersects(Wall[j].getGlobalBounds())) {
+					}
+					for (int j = 0; j < (Enemyvec.size()-1); j++) {
+						if (Enemyvec.back().Enemy.getGlobalBounds().intersects(Enemyvec[j].Enemy.getGlobalBounds())) {
 							tub = true;
 						}
+					}
+					if (Enemyvec.back().Enemy.getGlobalBounds().intersects(Door.getGlobalBounds())) {
+						tub = true;
+					}
+					if (Enemyvec.back().Enemy.getGlobalBounds().intersects(player.getGlobalBounds())) {
+						tub = true;
 					}
 					if (tub == false) {
 						break;
 					}
 					else {
+						printf("*");
 						Enemyvec.pop_back();
 					}
 				}
 
 			}
-			
 			isdraw = true;
 		}
 		
