@@ -331,7 +331,6 @@ int main() {
 	float y_size = textureSize.y / 32.000000;
 
 	sf::View view(sf::Vector2f(+500.0f, +350.0f), sf::Vector2f(VIEW_HEIGHT, VIEW_HEIGHT * 0.6));
-
 	std::vector<sf::RectangleShape> Wall;
 	sf::RectangleShape wall(sf::Vector2f(50.0f, 50.0f));
 
@@ -391,12 +390,33 @@ int main() {
 	std::vector<sf::RectangleShape> healposion;
 	sf::RectangleShape item(sf::Vector2f(50.0f, 50.0f));
 	// healposion
-
+	
 
 	//std::vector <enemy> Enemyvec;
 	
-	randommap();
 
+	sf::Texture menutex;
+	menutex.loadFromFile("menu.png");
+	sf::RectangleShape menu(sf::Vector2f(1200.0f, 675.0f));
+	menu.setOrigin(0.f, 0.f);
+	menu.setPosition(-103.0f, 20.0f);
+	menu.setTexture(&menutex);
+	//player.setFillColor(sf::Color::Red);
+
+
+	//sf::Texture b;
+	//menutex.loadFromFile("menu.png");
+	sf::RectangleShape buttol(sf::Vector2f(100.0f, 100.0f));
+	buttol.setOrigin(50.f, 50.f);
+	buttol.setPosition(0.0f, 0.0f);
+	//menu.setTexture(&menutex);
+
+	sf::RectangleShape corsor(sf::Vector2f(5.f, 5.f));
+	corsor.setOrigin(2.5f, 2.5f);
+
+	int strun = false;
+	randommap();
+	int screen = 0;
 	///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	while (window.isOpen()) {
 		window.clear();
@@ -416,6 +436,49 @@ int main() {
 				}
 			}
 		}
+		window.setMouseCursorVisible(false);
+		if (screen == 0) {
+			window.clear();
+			window.setView(view);
+			window.draw(menu);
+			if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Enter)) {
+				while (sf::Keyboard::isKeyPressed(sf::Keyboard::Enter)) {
+				}
+				screen = 1;
+			}
+			
+			window.setView(view);
+			window.display();
+		}
+		if (screen == 1) {
+			window.clear();
+			//window.setView(view);
+			sf::Vector2i mousePos = sf::Mouse::getPosition(window);
+			corsor.setPosition((float)mousePos.x, (float)mousePos.y);
+			window.draw(menu);
+			window.draw(buttol);
+			window.draw(corsor);
+			if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Enter)) {
+				screen = 2;
+			}
+			if (corsor.getGlobalBounds().intersects(buttol.getGlobalBounds())) {
+				buttol.setFillColor(sf::Color::Blue);
+				if (sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
+					screen = 2;
+				}
+			}
+			else {
+				buttol.setFillColor(sf::Color::White);
+			}
+			if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Escape)) {
+				while (sf::Keyboard::isKeyPressed(sf::Keyboard::Escape)) {
+				}
+				return 0;
+			}
+			window.setView(view);
+			window.display();
+		}
+		if(screen ==  2){
 		int row = 0;
 		int row_count = 0;
 		while (not Wall.empty()) Wall.pop_back();
@@ -487,7 +550,9 @@ int main() {
 			//randomenemy/////
 		}
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Escape)) {
-			break;
+			while (sf::Keyboard::isKeyPressed(sf::Keyboard::Escape)) {
+			}
+			screen = 1;
 		}
 
 
@@ -1066,6 +1131,7 @@ int main() {
 		//window.draw(playercard);
 		window.setView(view);
 		window.display();
+		}
 	}
 	return 0;
 }
