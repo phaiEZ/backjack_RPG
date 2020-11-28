@@ -493,7 +493,55 @@ int main() {
 	Song.getLoop();
 	Song.play();
 
+	sf::SoundBuffer swoosh;
+	swoosh.loadFromFile("snd/swooshClose.wav");
+	sf::Sound Swoosh;
+	Swoosh.setBuffer(swoosh);
 
+	sf::SoundBuffer coins;
+	coins.loadFromFile("snd/coin.wav");
+	sf::Sound Coin;
+	Coin.setBuffer(coins);
+
+	sf::SoundBuffer heal;
+	heal.loadFromFile("snd/heal.wav");
+	sf::Sound Heal;
+	Heal.setBuffer(heal);
+
+	sf::SoundBuffer shield;
+	shield.loadFromFile("snd/shield.wav");
+	sf::Sound Shield;
+	Shield.setBuffer(shield);
+
+	sf::SoundBuffer equip;
+	equip.loadFromFile("snd/equip.wav");
+	sf::Sound Equip;
+	Equip.setBuffer(equip);
+
+	sf::SoundBuffer attack;
+	attack.loadFromFile("snd/attack.wav");
+	sf::Sound Attack;
+	Attack.setBuffer(attack);
+
+	sf::SoundBuffer attacked;
+	attacked.loadFromFile("snd/attacked.wav");
+	sf::Sound Attacked;
+	Attacked.setBuffer(attacked);
+
+	sf::SoundBuffer step;
+	step.loadFromFile("snd/step.wav");
+	sf::Sound Step;
+	Step.setBuffer(step);
+
+	sf::SoundBuffer win;
+	win.loadFromFile("snd/win.wav");
+	sf::Sound Win;
+	Win.setBuffer(win); 
+
+	sf::SoundBuffer stairs;
+	stairs.loadFromFile("snd/stairs.wav");
+	sf::Sound Stairs;
+	Stairs.setBuffer(stairs);
 
 	///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	while (window.isOpen()) {
@@ -537,6 +585,7 @@ int main() {
 			if (corsor.getGlobalBounds().intersects(buttol.getGlobalBounds())) {
 				window.draw(buttolunder);
 				if (sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
+					Swoosh.play();
 					newgame = true;
 					screen = 6;
 				}
@@ -545,12 +594,14 @@ int main() {
 				//window.draw(buttolunder2);
 				window.draw(buttolunder2);
 				if (sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
+					Swoosh.play();
 					screen = 2;
 				}
 			}
 			else if (corsor.getGlobalBounds().intersects(buttol3.getGlobalBounds())) {
 				window.draw(buttolunder3);
 				if (sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
+					Swoosh.play();
 					newgame = true;
 					screen = 4;
 				}
@@ -558,6 +609,7 @@ int main() {
 			else if (corsor.getGlobalBounds().intersects(buttol4.getGlobalBounds())) {
 				window.draw(buttolunder4);
 				if (sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
+					Swoosh.play();
 					newgame = true;
 					screen = 5;
 				}
@@ -606,6 +658,7 @@ int main() {
 		}
 		if(screen ==  6){
 			if (newgame == true) {
+				Swoosh.play();
 				Song.stop();
 				Song.play();
 				level = 0;
@@ -636,6 +689,7 @@ int main() {
 			row_count += 1;
 		}
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::A)) {
+			Step.play();
 			player.move(-50.f, 0.f);
 			hand_hero.erase(hand_hero.begin(), hand_hero.end());
 			hand_enemy.erase(hand_enemy.begin(), hand_enemy.end());
@@ -645,6 +699,7 @@ int main() {
 			//printf("position x = %d position y = %d",player_posx,player_posy);
 		}
 		else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::D)) {
+			Step.play();
 			player.move(50.f, 0.0f);
 			hand_hero.erase(hand_hero.begin(), hand_hero.end());
 			hand_enemy.erase(hand_enemy.begin(), hand_enemy.end());
@@ -654,6 +709,7 @@ int main() {
 			//printf("position x = %d position y = %d", player_posx, player_posy);
 		}
 		else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::W)) {
+			Step.play();
 			player.move(0.0f, -50.f);
 			hand_hero.erase(hand_hero.begin(), hand_hero.end());
 			hand_enemy.erase(hand_enemy.begin(), hand_enemy.end());
@@ -665,6 +721,7 @@ int main() {
 			//printf("position x = %d position y = %d", player_posx, player_posy);
 		}
 		else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::S)) {
+			Step.play();
 			player.move(0.0f, 50.f);
 			hand_hero.erase(hand_hero.begin(), hand_hero.end());
 			hand_enemy.erase(hand_enemy.begin(), hand_enemy.end());
@@ -689,6 +746,7 @@ int main() {
 			//printf("position x = %d position y = %d", player_posx, player_posy);
 		}
 		else if (player.getGlobalBounds().intersects(Door.getGlobalBounds()) && sf::Keyboard::isKeyPressed(sf::Keyboard::Key::F)) {
+			Stairs.play();
 			player.setPosition(50.0f + shiftx, 50.0f + shifty);
 			isdraw = false;
 			randommap();
@@ -720,6 +778,7 @@ int main() {
 
 		for (int i = 0; i < healposion.size(); i++) {
 			if (player.getGlobalBounds().intersects(healposion[i].getGlobalBounds())) {
+				Heal.play();
 				herohp = 3;
 				healposion.erase(healposion.begin() + i);
 			}
@@ -727,13 +786,16 @@ int main() {
 
 		for (int i = 0; i < Coinitem.size(); i++) {
 			if (player.getGlobalBounds().intersects(Coinitem[i].getGlobalBounds())) {
+				Coin.play();
 				coin += 1;
 				Coinitem.erase(Coinitem.begin() + i);
 			}
 		}
 
 		for (int i = 0; i < damageitem.size(); i++) {
+			Attack.play();
 			if (player.getGlobalBounds().intersects(damageitem[i].getGlobalBounds())) {
+				Equip.play();
 				herodamage += 1;
 				damageitem.erase(damageitem.begin() + i);
 			}
@@ -741,6 +803,7 @@ int main() {
 
 		for (int i = 0; i < shielditem.size(); i++) {
 			if (player.getGlobalBounds().intersects(shielditem[i].getGlobalBounds())) {
+				Shield.play();
 				sheildnum += 1;
 				shielditem.erase(shielditem.begin() + i);
 			}
@@ -749,6 +812,7 @@ int main() {
 
 		for (int i = 0; i < Enemyvec.size(); i++) {
 			if (player.getGlobalBounds().intersects(Enemyvec[i].Enemy.getGlobalBounds()) && (Enemyvec[i].GetHp()) > 0) {
+				Swoosh.play();
 				if (walk == 1) {
 					player.move(50.f, 0.f);
 				}
@@ -1096,6 +1160,7 @@ int main() {
 						printf_s("\nhero is %d", hero_score);
 						printf_s("\nenemy is %d\n", enemy_score);
 						printf("hero is lose  TT \n");
+						Attacked.play();
 						herogetdamage();
 						for (int i = 0; i < hand_hero.size(); i++)
 						{
@@ -1148,6 +1213,7 @@ int main() {
 						printf_s("\nhero is %d", hero_score);
 						printf_s("\nenemy is %d\n", enemy_score);
 						printf("hero is winner  ^^ \n");
+						Attack.play();
 						Enemyvec[enemynum].takedamage(herodamage);
 						for (int i = 0; i < hand_hero.size(); i++)
 						{
@@ -1220,9 +1286,11 @@ int main() {
 					printf_s("\nenemy is %d\n", enemy_score);
 					if (hero_score == enemy_score) {
 						printf("draw  ;-; \n");
+						Swoosh.play();
 					}
 					if (hero_score > enemy_score) {
-						printf("hero is winner  ^^ \n");
+						printf("hero is winner  ^^ \n");\
+						Attack.play();
 						cl.restart();
 						while (true) {
 							Time = cl.getElapsedTime().asSeconds();
@@ -1245,6 +1313,7 @@ int main() {
 					}
 					if (hero_score < enemy_score) {
 						printf("hero is lose  TT \n");
+						Attacked.play();
 						herogetdamage();
 						cl.restart();
 						while (true) {
