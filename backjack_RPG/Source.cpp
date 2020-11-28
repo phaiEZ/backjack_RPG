@@ -1,4 +1,5 @@
 ﻿#include <SFML/Graphics.hpp>
+#include <SFML/Audio.hpp>
 #include <iostream>
 #include <vector>
 #include<stdio.h>
@@ -24,6 +25,7 @@ float shifty = 100;
 
 bool isdraw = false;
 
+bool newgame = true;
 int enemy_card;
 int hero_card;
 int Card[52];
@@ -323,7 +325,7 @@ int winer(int a, int b) {
 int main() {
 	srand(time(NULL));
 	sf::RenderWindow window(sf::VideoMode(550 + shiftx, 550 + shifty), "Black_jack_rpg0.1", sf::Style::Close | sf::Style::Fullscreen); 
-	window.setFramerateLimit(30);
+	window.setFramerateLimit(200);
 	sf::Texture Texture;
 	Texture.loadFromFile("new2.png");
 	sf::Vector2u textureSize = Texture.getSize();
@@ -342,10 +344,6 @@ int main() {
 	//player.setFillColor(sf::Color::Red);
 	player.setTextureRect(sf::IntRect(x_size * 25, y_size * 0, x_size, y_size));
 
-	herodamage = 1;
-	herohp = 3;
-	sheildnum = 1;
-	coin = 0;
 
 	// door
 	sf::RectangleShape Door(sf::Vector2f(50.0f, 50.0f));
@@ -391,6 +389,12 @@ int main() {
 	sf::RectangleShape item(sf::Vector2f(50.0f, 50.0f));
 	// healposion
 	
+	sf::Texture papertex;
+	papertex.loadFromFile("paper.png");
+	sf::RectangleShape paper(sf::Vector2f(500.0f, 500.0f));
+	paper.setOrigin(0.f, 0.f);
+	paper.setPosition(-103.0f, 20.0f);
+	paper.setTexture(&papertex);
 
 	//std::vector <enemy> Enemyvec;
 	
@@ -403,20 +407,95 @@ int main() {
 	menu.setTexture(&menutex);
 	//player.setFillColor(sf::Color::Red);
 
+	sf::Texture menutex2;
+	menutex2.loadFromFile("menu2.png");
+	sf::RectangleShape menu2(sf::Vector2f(1200.0f, 675.0f));
+	menu2.setOrigin(0.f, 0.f);
+	menu2.setPosition(-103.0f, 20.0f);
+	menu2.setTexture(&menutex2);
+
+	sf::Texture menutex3;
+	menutex3.loadFromFile("menu3.png");
+	sf::RectangleShape menu3(sf::Vector2f(1200.0f, 675.0f));
+	menu3.setOrigin(0.f, 0.f);
+	menu3.setPosition(-103.0f, 20.0f);
+	menu3.setTexture(&menutex3);
+
+	sf::Texture menutex4;
+	menutex4.loadFromFile("menu4.png");
+	sf::RectangleShape menu4(sf::Vector2f(1200.0f, 675.0f));
+	menu4.setOrigin(0.f, 0.f);
+	menu4.setPosition(-103.0f, 20.0f);
+	menu4.setTexture(&menutex4);
+
+	sf::Texture menutex5;
+	menutex5.loadFromFile("menu5.png");
+	sf::RectangleShape menu5(sf::Vector2f(1200.0f, 675.0f));
+	menu5.setOrigin(0.f, 0.f);
+	menu5.setPosition(-103.0f, 20.0f);
+	menu5.setTexture(&menutex5);
 
 	//sf::Texture b;
 	//menutex.loadFromFile("menu.png");
-	sf::RectangleShape buttol(sf::Vector2f(100.0f, 100.0f));
+	sf::RectangleShape buttol(sf::Vector2f(185.0f, 55.0f));
 	buttol.setOrigin(50.f, 50.f);
-	buttol.setPosition(0.0f, 0.0f);
+	buttol.setPosition(945.0f, 300.0f);
 	//menu.setTexture(&menutex);
+	sf::RectangleShape buttolunder(sf::Vector2f(180.0f, 5.0f));
+	buttolunder.setOrigin(50.f, 50.f);
+	buttolunder.setPosition(947.0f, 360.0f);
 
-	sf::RectangleShape corsor(sf::Vector2f(5.f, 5.f));
-	corsor.setOrigin(2.5f, 2.5f);
+	sf::RectangleShape buttol2(sf::Vector2f(140.0f, 30.0f));
+	buttol2.setOrigin(50.f, 50.f);
+	buttol2.setPosition(994.0f, 415.0f);
+	//menu.setTexture(&menutex);
+	sf::RectangleShape buttolunder2(sf::Vector2f(140.0f, 5.0f));
+	buttolunder2.setOrigin(50.f, 50.f);
+	buttolunder2.setPosition(996.0f, 445.0f);
 
-	int strun = false;
-	randommap();
+	sf::RectangleShape buttol3(sf::Vector2f(294.0f, 30.0f));
+	buttol3.setOrigin(50.f, 50.f);
+	buttol3.setPosition(842.0f, 452.0f);
+	//menu.setTexture(&menutex);
+	sf::RectangleShape buttolunder3(sf::Vector2f(294.0f, 5.0f));
+	buttolunder3.setOrigin(50.f, 50.f);
+	buttolunder3.setPosition(842.0f, 482.0f);
+
+	sf::RectangleShape buttol4(sf::Vector2f(245.0f, 30.0f));
+	buttol4.setOrigin(50.f, 50.f);
+	buttol4.setPosition(895.0f, 492.0f);
+	//menu.setTexture(&menutex);
+	sf::RectangleShape buttolunder4(sf::Vector2f(245.0f, 5.0f));
+	buttolunder4.setOrigin(50.f, 50.f);
+	buttolunder4.setPosition(895.0f, 522.0f);
+
+
+	
+	sf::RectangleShape buttol5(sf::Vector2f(105.0f, 30.0f));
+	buttol5.setOrigin(50.f, 50.f);
+	buttol5.setPosition(1035.0f, 529.0f);
+
+	sf::RectangleShape buttolunder5(sf::Vector2f(105.0f, 5.0f));
+	buttolunder5.setOrigin(50.f, 50.f);
+	buttolunder5.setPosition(1035.0f, 559.0f);
+
+
+	sf::RectangleShape corsor(sf::Vector2f(25.f, 25.f));
+	corsor.setOrigin(12.5f, 12.5f);
+	corsor.setTexture(&Texture);
+	corsor.setTextureRect(sf::IntRect(x_size * 22.00000000 , y_size * 22.000000, x_size, y_size));
+
 	int screen = 0;
+	
+
+	sf::Music Song;
+	Song.play();
+	Song.openFromFile("music.wav");
+	Song.setLoop(true);
+
+
+
+
 	///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	while (window.isOpen()) {
 		window.clear();
@@ -441,12 +520,11 @@ int main() {
 			window.clear();
 			window.setView(view);
 			window.draw(menu);
-			if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Enter)) {
+			if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Enter)|| sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
 				while (sf::Keyboard::isKeyPressed(sf::Keyboard::Enter)) {
 				}
 				screen = 1;
 			}
-			
 			window.setView(view);
 			window.display();
 		}
@@ -454,31 +532,91 @@ int main() {
 			window.clear();
 			//window.setView(view);
 			sf::Vector2i mousePos = sf::Mouse::getPosition(window);
-			corsor.setPosition((float)mousePos.x, (float)mousePos.y);
-			window.draw(menu);
-			window.draw(buttol);
-			window.draw(corsor);
-			if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Enter)) {
-				screen = 2;
-			}
+			corsor.setPosition((float)mousePos.x -300, (float)mousePos.y - 300);
+			window.draw(menu2);
+			//window.draw(buttol5);
 			if (corsor.getGlobalBounds().intersects(buttol.getGlobalBounds())) {
-				buttol.setFillColor(sf::Color::Blue);
+				window.draw(buttolunder);
+				if (sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
+					newgame = true;
+					screen = 6;
+				}
+			}
+			else if (corsor.getGlobalBounds().intersects(buttol2.getGlobalBounds())) {
+				//window.draw(buttolunder2);
+				window.draw(buttolunder2);
 				if (sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
 					screen = 2;
 				}
 			}
-			else {
-				buttol.setFillColor(sf::Color::White);
-			}
-			if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Escape)) {
-				while (sf::Keyboard::isKeyPressed(sf::Keyboard::Escape)) {
+			else if (corsor.getGlobalBounds().intersects(buttol3.getGlobalBounds())) {
+				window.draw(buttolunder3);
+				if (sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
+					newgame = true;
+					screen = 4;
 				}
-				return 0;
+			}
+			else if (corsor.getGlobalBounds().intersects(buttol4.getGlobalBounds())) {
+				window.draw(buttolunder4);
+				if (sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
+					newgame = true;
+					screen = 5;
+				}
+			}
+			else if (corsor.getGlobalBounds().intersects(buttol5.getGlobalBounds())) {
+				window.draw(buttolunder5);
+				if (sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
+					return 0;
+				}
 			}
 			window.setView(view);
+			window.draw(corsor);
 			window.display();
 		}
-		if(screen ==  2){
+		if (screen == 2) {
+			window.clear();
+			if (sf::Keyboard::isKeyPressed(sf::Keyboard::Escape)) {
+				screen = 1;
+			}
+			window.draw(menu3);
+			window.display();
+		}
+		if (screen == 3) {
+			window.clear();
+			if (sf::Keyboard::isKeyPressed(sf::Keyboard::Escape)) {
+				screen = 1;
+			}
+			window.draw(menu3);
+			window.display();
+		}
+		if (screen == 4) {
+			window.clear();
+			if (sf::Keyboard::isKeyPressed(sf::Keyboard::Escape)) {
+				screen = 1;
+			}
+			window.draw(menu4);
+			window.display();
+		}
+		if (screen == 5) {
+			window.clear();
+			if (sf::Keyboard::isKeyPressed(sf::Keyboard::Escape)) {
+				screen = 1;
+			}
+			window.draw(menu5);
+			window.display();
+		}
+		if(screen ==  6){
+			if (newgame == true) {
+				level = 0;
+				randommap();
+				newgame = false;
+				isdraw = false;
+				player.setPosition(50.0f + shiftx, 50.0f + shifty);
+				herodamage = 1;
+				herohp = 3;
+				sheildnum = 0;
+				coin = 0;
+			}
 		int row = 0;
 		int row_count = 0;
 		while (not Wall.empty()) Wall.pop_back();
@@ -535,7 +673,7 @@ int main() {
 			}
 			//printf("position x = %d position y = %d", player_posx, player_posy);
 		}
-		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::R)) {
+		else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::R)) {
 			player.setPosition(50.0f + shiftx, 50.0f + shifty);
 			isdraw = false;
 			randommap();
@@ -543,15 +681,38 @@ int main() {
 			}
 			//printf("position x = %d position y = %d", player_posx, player_posy);
 		}
-		if (player.getGlobalBounds().intersects(Door.getGlobalBounds()) && sf::Keyboard::isKeyPressed(sf::Keyboard::Key::F)) {
+		else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::T)) {
+			herohp = 0;
+			while (sf::Keyboard::isKeyPressed(sf::Keyboard::T)) {
+			}
+			//printf("position x = %d position y = %d", player_posx, player_posy);
+		}
+		else if (player.getGlobalBounds().intersects(Door.getGlobalBounds()) && sf::Keyboard::isKeyPressed(sf::Keyboard::Key::F)) {
 			player.setPosition(50.0f + shiftx, 50.0f + shifty);
 			isdraw = false;
 			randommap();
 			//randomenemy/////
 		}
+		else if (herohp <= 0) {
+			bool isDraw = false;
+			while (herohp <= 0){
+				if (isDraw == false) {
+					paper.setPosition(240.0f, 100.0f);
+					window.draw(paper);
+					window.display();
+					isDraw = true;
+				}
+				if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Enter)) {
+					herohp = 3;
+					screen = 1;
+				}
+			}
+			
+		}
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Escape)) {
 			while (sf::Keyboard::isKeyPressed(sf::Keyboard::Escape)) {
 			}
+
 			screen = 1;
 		}
 
