@@ -1,5 +1,6 @@
 ﻿#include <SFML/Graphics.hpp>
 #include <SFML/Audio.hpp>
+#include <SFML/System.hpp>
 #include <iostream>
 #include <vector>
 #include<stdio.h>
@@ -487,13 +488,10 @@ int main() {
 
 	int screen = 0;
 	
-
 	sf::Music Song;
+	Song.openFromFile("snd/The_Bards_Tale.wav");
+	Song.getLoop();
 	Song.play();
-	Song.openFromFile("music.wav");
-	Song.setLoop(true);
-
-
 
 
 	///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -607,6 +605,8 @@ int main() {
 		}
 		if(screen ==  6){
 			if (newgame == true) {
+				Song.stop();
+				Song.play();
 				level = 0;
 				randommap();
 				newgame = false;
