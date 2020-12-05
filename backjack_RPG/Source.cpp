@@ -740,7 +740,8 @@ int main() {
 			//printf("position x = %d position y = %d", player_posx, player_posy);
 		}
 		else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::T)) {
-			herohp = 0;
+			herodamage++;
+
 			while (sf::Keyboard::isKeyPressed(sf::Keyboard::T)) {
 			}
 			//printf("position x = %d position y = %d", player_posx, player_posy);
@@ -761,6 +762,8 @@ int main() {
 					window.display();
 					isDraw = true;
 				}
+				hand_hero.erase(hand_hero.begin(), hand_hero.end());
+				hand_enemy.erase(hand_enemy.begin(), hand_enemy.end());
 				if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Enter)) {
 					herohp = 3;
 					screen = 1;
@@ -804,7 +807,10 @@ int main() {
 		for (int i = 0; i < shielditem.size(); i++) {
 			if (player.getGlobalBounds().intersects(shielditem[i].getGlobalBounds())) {
 				Shield.play();
-				sheildnum += 1;
+				if (sheildnum <= 5) {
+					sheildnum++;
+				}
+				
 				shielditem.erase(shielditem.begin() + i);
 			}
 		}
@@ -1092,11 +1098,21 @@ int main() {
 		UI.setTextureRect(sf::IntRect(x_size * 4.0000000, y_size * 30.0000000, x_size, y_size));
 		window.draw(UI);
 
+		if ((herodamage / 10) > 0) {
+			NUM.setOrigin(0.f, 0.f);
+			NUM.setPosition(760, shifty + 5);
+			NUM.setTexture(&Texture);
+			NUM.setTextureRect(sf::IntRect(x_size * (19.0000000 + (herodamage / 10)), y_size * 29.0000000, x_size, y_size));
+			window.draw(NUM);
+		}
+
 		NUM.setOrigin(0.f, 0.f);
 		NUM.setPosition(800, shifty + 5);
 		NUM.setTexture(&Texture);
-		NUM.setTextureRect(sf::IntRect(x_size* (19.0000000 + herodamage), y_size * 29.0000000, x_size, y_size));
+		NUM.setTextureRect(sf::IntRect(x_size * (19.0000000 + (herodamage % 10)), y_size * 29.0000000, x_size, y_size));
 		window.draw(NUM);
+
+
 
 		UI.setOrigin(0.f, 0.f);
 		UI.setPosition(865, shifty + 75);
@@ -1105,11 +1121,22 @@ int main() {
 		UI.setTextureRect(sf::IntRect(x_size * 9.0000000, y_size * 26.0000000, x_size, y_size));
 		window.draw(UI);
 
+
+		if ((coin / 10) > 0) {
+			NUM.setOrigin(0.f, 0.f);
+			NUM.setPosition(760, shifty + 80);
+			NUM.setTexture(&Texture);
+			NUM.setTextureRect(sf::IntRect(x_size * (19.0000000 + (coin / 10)), y_size * 29.0000000, x_size, y_size));
+			window.draw(NUM);
+		}
+
 		NUM.setOrigin(0.f, 0.f);
 		NUM.setPosition(800, shifty + 80);
 		NUM.setTexture(&Texture);
-		NUM.setTextureRect(sf::IntRect(x_size * (19.0000000 + coin), y_size * 29.0000000, x_size, y_size));
+		NUM.setTextureRect(sf::IntRect(x_size * (19.0000000 + (coin % 10)), y_size * 29.0000000, x_size, y_size));
 		window.draw(NUM);
+
+
 		/// UI //////////////////////////////////////////////////////////////
 		if (fight == true) {
 			hand_hero.erase(hand_hero.begin(), hand_hero.end());
