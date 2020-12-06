@@ -6,17 +6,31 @@ enemy::enemy(sf::Texture *texture,int mostertype, int hpmoster ,int enemyposx , 
 	Enemy.setOrigin(0.f, 0.f);
 	float x_size = texture->getSize().x / 32.000000;
 	float y_size = texture->getSize().y / 32.000000;
+	int Ennumx;
+	int Ennumy;
 	Enemy.setTexture(texture);
-	if (mostertype == 1) {
-		Enemy.setTextureRect(sf::IntRect(x_size * 29, y_size * 8, x_size, y_size));
+	if (mostertype > 28) {
+		Ennumx = mostertype - 28;
+		Ennumy = 9;
 	}
-	else if (mostertype == 2) {
-		Enemy.setTextureRect(sf::IntRect(x_size * 29, y_size * 6, x_size, y_size));
+	else if (mostertype > 21) {
+		Ennumx = mostertype - 21;
+		Ennumy = 8;
 	}
-	else if (mostertype == 3) {
-		Enemy.setTextureRect(sf::IntRect(x_size * 29, y_size * 5, x_size, y_size));
+	else if (mostertype > 14) {
+		Ennumx = mostertype -14;
+		Ennumy = 7;
 	}
-	
+	else if (mostertype > 7) {
+		Ennumx = mostertype - 7;
+		Ennumy = 6;
+	}
+	else {
+		Ennumx = mostertype;
+		Ennumy = 5;
+	}
+	Enemy.setTextureRect(sf::IntRect(x_size * (24 + Ennumx), y_size * (0 + Ennumy), x_size, y_size));
+
 	Enemy.setPosition(enemyposx, enemyposy);
 	this->hp = hpmoster;
 	this->maxhp = hpmoster;

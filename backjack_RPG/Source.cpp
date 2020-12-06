@@ -59,6 +59,9 @@ int herohp;
 int sheildnum;
 int coin;
 int levelten = 0;
+int playernumx = 0;
+int playernumy = 0;
+
 
 std::vector <enemy> Enemyvec;
 
@@ -436,6 +439,14 @@ int main() {
 	menu5.setPosition(-103.0f, 20.0f);
 	menu5.setTexture(&menutex5);
 
+	sf::Texture menutex6;
+	menutex6.loadFromFile("inputnamemenu.png");
+	sf::RectangleShape menu6(sf::Vector2f(1200.0f, 675.0f));
+	menu6.setOrigin(0.f, 0.f);
+	menu6.setPosition(-103.0f, 20.0f);
+	menu6.setTexture(&menutex6);
+
+
 	//sf::Texture b;
 	//menutex.loadFromFile("menu.png");
 	sf::RectangleShape buttol(sf::Vector2f(185.0f, 55.0f));
@@ -485,6 +496,26 @@ int main() {
 	corsor.setOrigin(12.5f, 12.5f);
 	corsor.setTexture(&Texture);
 	corsor.setTextureRect(sf::IntRect(x_size * 22.00000000 , y_size * 22.000000, x_size, y_size));
+
+	sf::Texture arrowrighttex;
+	arrowrighttex.loadFromFile("arrowright.png");
+	sf::RectangleShape arrowright(sf::Vector2f(105.0f, 105.0f));
+	arrowright.setOrigin(0.f, 0.f);
+	arrowright.setTexture(&arrowrighttex);
+
+	sf::Texture arrowlefttex;
+	arrowlefttex.loadFromFile("arrowleft.png");
+	sf::RectangleShape arrowleft(sf::Vector2f(105.0f, 105.0f));
+	arrowleft.setOrigin(0.f, 0.f);
+	arrowleft.setTexture(&arrowlefttex);
+
+	sf::RectangleShape playerselect(sf::Vector2f(150.0f, 150.0f));
+	playerselect.setOrigin(0.f, 0.f);
+	playerselect.setTexture(&Texture);;
+	playerselect.setTextureRect(sf::IntRect(x_size * 25, y_size * 0, x_size, y_size));
+
+
+
 
 	int screen = 0;
 	
@@ -587,7 +618,9 @@ int main() {
 				if (sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
 					Swoosh.play();
 					newgame = true;
-					screen = 6;
+					playernumx = 0;
+					playernumy = 0;
+					screen = 7;
 				}
 			}
 			else if (corsor.getGlobalBounds().intersects(buttol2.getGlobalBounds())) {
@@ -624,6 +657,64 @@ int main() {
 			window.draw(corsor);
 			window.display();
 		}
+
+		if (screen == 7) {
+			window.clear();
+			sf::Vector2i mousePos = sf::Mouse::getPosition(window);
+			corsor.setPosition((float)mousePos.x - 300, (float)mousePos.y - 300);
+			arrowright.setFillColor(sf::Color(255, 255, 255, 255));
+			arrowleft.setFillColor(sf::Color(255, 255, 255, 255));
+			if (playernumx >= 7) {
+				playernumx = 0;
+				playernumy++;
+			}
+			if (playernumx < 0) {
+				playernumx = 6;
+				playernumy--;
+			}
+			if (playernumy >= 10) {
+				playernumy = 0;
+			}
+			if (playernumy < 0) {
+				playernumy = 9;
+			}
+			playerselect.setTextureRect(sf::IntRect(x_size * (25 + playernumx), y_size * (0 + playernumy), x_size, y_size));
+
+			if (sf::Keyboard::isKeyPressed(sf::Keyboard::Escape)) {
+				screen = 1;
+			}
+			if (sf::Keyboard::isKeyPressed(sf::Keyboard::Enter)) {
+				player.setTextureRect(sf::IntRect(x_size* (25 + playernumx), y_size* (0 + playernumy), x_size, y_size));
+				screen = 6;
+			}
+			else if (corsor.getGlobalBounds().intersects(arrowright.getGlobalBounds())) {
+				arrowright.setFillColor(sf::Color(255,255,255,128));
+				if (sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
+					while (sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
+					}
+					playernumx++;
+				}
+			}
+			else if (corsor.getGlobalBounds().intersects(arrowleft.getGlobalBounds())) {
+				arrowleft.setFillColor(sf::Color(255, 255, 255, 128));
+				if (sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
+					while (sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
+					}
+					playernumx--;
+				}
+			}
+			arrowright.setPosition(750.f, 260.f);
+			arrowleft.setPosition(130.f, 260.f);
+			playerselect.setPosition(415.f, 240.f);
+			window.draw(menu6);
+			window.draw(arrowleft);
+			window.draw(arrowright);
+			window.draw(playerselect);
+			window.draw(corsor);
+
+			window.display();
+		}
+
 		if (screen == 2) {
 			window.clear();
 			if (sf::Keyboard::isKeyPressed(sf::Keyboard::Escape)) {
@@ -865,7 +956,7 @@ int main() {
 				while (1){
 					int ranx = randoM(1, 9);
 					int rany = randoM(1, 9);
-					int ranEn = randoM(1, 3);
+					int ranEn = randoM(1, 35);
 					int ranblood = randoM(1, 1 + (level/2));
 					Enemyvec.push_back(enemy(&Texture, ranEn, ranblood, 50 * ranx + shiftx, 50 * rany + shifty));
 					tub = false;
