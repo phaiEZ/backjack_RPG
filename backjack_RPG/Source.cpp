@@ -61,8 +61,8 @@ int coin;
 int levelten = 0;
 int playernumx = 0;
 int playernumy = 0;
-
-
+int VOL = 50;
+bool ispause = false;
 std::vector <enemy> Enemyvec;
 
 
@@ -514,13 +514,58 @@ int main() {
 	playerselect.setTexture(&Texture);;
 	playerselect.setTextureRect(sf::IntRect(x_size * 25, y_size * 0, x_size, y_size));
 
+	sf::RectangleShape volume(sf::Vector2f(50.0f, 50.0f));
+	volume.setOrigin(0.f, 0.f);
+	volume.setTexture(&Texture);;
+	volume.setPosition(500.0f,0.0f);
+	volume.setTextureRect(sf::IntRect(x_size * 25, y_size * 22, x_size, y_size));
 
+
+	sf::Texture pausetex;
+	pausetex.loadFromFile("pause.png");
+	sf::RectangleShape pause(sf::Vector2f(500.0f, 500.0f));
+	pause.setTexture(&pausetex);;
+	pause.setPosition(226.0f, 110.0f);
+
+	sf::Texture pause_menu_tex;
+	pause_menu_tex.loadFromFile("pause_menu_icon.png");
+	sf::RectangleShape pause_menu(sf::Vector2f(80.0f, 80.0f));
+	pause_menu.setTexture(&pause_menu_tex);;
+	pause_menu.setPosition(280.0f, 420.0f);
+
+	sf::Texture pause_volumemax_tex;
+	pause_volumemax_tex.loadFromFile("pause_volume_icon.png");
+
+	sf::Texture pause_volumelow_tex;
+	pause_volumelow_tex.loadFromFile("pause_volumeoff_icon.png");
+
+	sf::RectangleShape pause_volume(sf::Vector2f(80.0f, 80.0f));
+	pause_volume.setTexture(&pause_volumemax_tex);;
+	pause_volume.setPosition(380.0f, 420.0f);
+
+	sf::Texture pause_suicide_tex;
+	pause_suicide_tex.loadFromFile("pause_suicide_icon.png");
+	sf::RectangleShape pause_suicide(sf::Vector2f(80.0f, 80.0f));
+	pause_suicide.setTexture(&pause_suicide_tex);;
+	pause_suicide.setPosition(480.0f, 420.0f);
+
+	sf::Texture pause_play_tex;
+	pause_play_tex.loadFromFile("pause_play_icon.png");
+	sf::RectangleShape pause_play(sf::Vector2f(80.0f, 80.0f));
+	pause_play.setTexture(&pause_play_tex);;
+	pause_play.setPosition(580.0f, 420.0f);
+
+
+	sf::RectangleShape player_dead(sf::Vector2f(80.0f, 80.0f));
+	player_dead.setTexture(&Texture);;
+	player_dead.setPosition(0.0f, 0.0f);
 
 
 	int screen = 0;
 	
 	sf::Music Song;
 	Song.openFromFile("snd/The_Bards_Tale.wav");
+	Song.setVolume(VOL);
 	Song.getLoop();
 	Song.play();
 
@@ -608,11 +653,39 @@ int main() {
 		}
 		if (screen == 1) {
 			window.clear();
+			Song.setVolume(VOL);
 			//window.setView(view);
 			sf::Vector2i mousePos = sf::Mouse::getPosition(window);
 			corsor.setPosition((float)mousePos.x -300, (float)mousePos.y - 300);
 			window.draw(menu2);
 			//window.draw(buttol5);
+			volume.setPosition(1050.0f, 0.0f);
+			volume.setFillColor(sf::Color(255, 255, 255, 255));
+
+			if (VOL == 0) {
+				volume.setTextureRect(sf::IntRect(x_size * 21, y_size * 28, x_size, y_size));
+		}
+			else {
+				volume.setTextureRect(sf::IntRect(x_size * 22, y_size * 28, x_size, y_size));
+			}
+
+
+		if (corsor.getGlobalBounds().intersects(volume.getGlobalBounds())) {
+			volume.setFillColor(sf::Color(255, 255, 255, 128));
+			if (sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
+				while (sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
+				}
+				if (VOL == 0) {
+					VOL = 50;
+				}
+				else {
+					VOL = 0;
+				}
+			}
+		}
+
+
+
 			if (corsor.getGlobalBounds().intersects(buttol.getGlobalBounds())) {
 				window.draw(buttolunder);
 				if (sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
@@ -653,6 +726,7 @@ int main() {
 					return 0;
 				}
 			}
+			window.draw(volume);
 			window.setView(view);
 			window.draw(corsor);
 			window.display();
@@ -685,6 +759,7 @@ int main() {
 			}
 			if (sf::Keyboard::isKeyPressed(sf::Keyboard::Enter)) {
 				player.setTextureRect(sf::IntRect(x_size* (25 + playernumx), y_size* (0 + playernumy), x_size, y_size));
+				player_dead.setTextureRect(sf::IntRect(x_size* (25 + playernumx), y_size* (0 + playernumy), x_size, y_size));
 				screen = 6;
 			}
 			else if (corsor.getGlobalBounds().intersects(arrowright.getGlobalBounds())) {
@@ -749,6 +824,7 @@ int main() {
 		}
 		if(screen ==  6){
 			if (newgame == true) {
+				ispause = false;
 				Swoosh.play();
 				Song.stop();
 				Song.play();
@@ -762,6 +838,7 @@ int main() {
 				sheildnum = 0;
 				coin = 0;
 			}
+		Song.setVolume(VOL);
 		int row = 0;
 		int row_count = 0;
 		while (not Wall.empty()) Wall.pop_back();
@@ -779,6 +856,7 @@ int main() {
 			}
 			row_count += 1;
 		}
+		if(ispause != true){
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::A)) {
 			Step.play();
 			player.move(-50.f, 0.f);
@@ -849,7 +927,9 @@ int main() {
 			while (herohp <= 0){
 				if (isDraw == false) {
 					paper.setPosition(240.0f, 100.0f);
+					player_dead.setPosition(454.0f, 275.0f);
 					window.draw(paper);
+					window.draw(player_dead);
 					window.display();
 					isDraw = true;
 				}
@@ -865,10 +945,9 @@ int main() {
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Escape)) {
 			while (sf::Keyboard::isKeyPressed(sf::Keyboard::Escape)) {
 			}
-
-			screen = 1;
+			ispause = true;
 		}
-
+		}
 
 		for (int i = 0; i < healposion.size(); i++) {
 			if (player.getGlobalBounds().intersects(healposion[i].getGlobalBounds())) {
@@ -1478,6 +1557,73 @@ int main() {
 		}
 		*/
 		//window.draw(playercard);
+		if (ispause == true) {
+			sf::Vector2i mousePos = sf::Mouse::getPosition(window);
+			corsor.setPosition((float)mousePos.x - 300, (float)mousePos.y - 300);
+			pause_menu.setFillColor(sf::Color(255, 255, 255, 255));
+			pause_volume.setFillColor(sf::Color(255, 255, 255, 255));
+			pause_suicide.setFillColor(sf::Color(255, 255, 255, 255));
+			pause_play.setFillColor(sf::Color(255, 255, 255, 255));
+			if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Enter) || sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Escape)) {
+				while (sf::Keyboard::isKeyPressed(sf::Keyboard::Enter) || sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Escape)) {
+				}
+				ispause = false;
+			}
+			
+			if(corsor.getGlobalBounds().intersects(pause_menu.getGlobalBounds())){
+				pause_menu.setFillColor(sf::Color(255, 255, 255, 128));
+				if (sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
+					while (sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
+					}
+					screen = 1;
+				}
+			}
+			else if (corsor.getGlobalBounds().intersects(pause_volume.getGlobalBounds())) {
+				pause_volume.setFillColor(sf::Color(255, 255, 255, 128));
+				if (sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
+					while (sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
+					}
+					if (VOL == 50) {
+						VOL = 0;
+					}
+					else {
+						VOL = 50;
+					}
+				}
+			}
+
+			else if (corsor.getGlobalBounds().intersects(pause_suicide.getGlobalBounds())) {
+				pause_suicide.setFillColor(sf::Color(255, 255, 255, 128));
+				if (sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
+					while (sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
+					}
+					herohp = 0;
+					ispause = false;
+				}
+			}
+
+			else if (corsor.getGlobalBounds().intersects(pause_play.getGlobalBounds())) {
+				pause_play.setFillColor(sf::Color(255, 255, 255, 128));
+				if (sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
+					while (sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
+					}
+					ispause = false;
+				}
+			}
+
+			if (VOL == 50) {
+				pause_volume.setTexture(&pause_volumemax_tex);;
+			}
+			else {
+				pause_volume.setTexture(&pause_volumelow_tex);;
+			}
+			window.draw(pause);
+			window.draw(pause_menu);
+			window.draw(pause_volume);
+			window.draw(pause_suicide);
+			window.draw(pause_play);
+			window.draw(corsor);
+		}
 		window.setView(view);
 		window.display();
 		}
