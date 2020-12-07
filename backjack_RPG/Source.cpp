@@ -11,6 +11,7 @@
 #include <vector>
 #include"card.h"
 #include "enemy.h"
+#include "Textbox.h"
 #include <stdio.h>
 using namespace std;
 
@@ -63,8 +64,10 @@ int playernumx = 0;
 int playernumy = 0;
 int VOL = 50;
 bool ispause = false;
+string playername = "";
+string SCore;
+int score = 0;
 std::vector <enemy> Enemyvec;
-
 
 void ResetGrid()
 {
@@ -619,6 +622,28 @@ int main() {
 	sf::Sound Stairs;
 	Stairs.setBuffer(stairs);
 
+
+
+	sf::Font BITWONDER;
+	BITWONDER.loadFromFile("8-BIT WONDER.ttf");
+	Textbox textbox1(30, sf::Color::Black, true);
+	textbox1.setFont(BITWONDER);
+	textbox1.setPosition({ 420,496 });
+	textbox1.setLimit(true,5);
+
+	sf::Text Name;
+	Name.setString(playername);
+	Name.setFont(BITWONDER);
+	Name.setFillColor(sf::Color::Black);
+	Name.setCharacterSize(20);
+	Name.setPosition(0, 0);
+
+	sf::Text Score;
+	Score.setFont(BITWONDER);
+	Score.setFillColor(sf::Color::Black);
+	Score.setCharacterSize(20);
+	Score.setPosition(0, 0);
+	
 	///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	while (window.isOpen()) {
 		window.clear();
@@ -633,9 +658,7 @@ int main() {
 				ResizeView(window, view);
 				break;
 			case sf::Event::TextEntered:
-				if (evnt.text.unicode < 128) {
-					//printf("%c", evnt.text.unicode);
-				}
+				textbox1.typedOn(evnt);
 			}
 		}
 		window.setMouseCursorVisible(false);
@@ -693,6 +716,7 @@ int main() {
 					newgame = true;
 					playernumx = 0;
 					playernumy = 0;
+					textbox1.Cleartext();
 					screen = 7;
 				}
 			}
@@ -758,6 +782,7 @@ int main() {
 				screen = 1;
 			}
 			if (sf::Keyboard::isKeyPressed(sf::Keyboard::Enter)) {
+				playername = textbox1.getText();
 				player.setTextureRect(sf::IntRect(x_size* (25 + playernumx), y_size* (0 + playernumy), x_size, y_size));
 				player_dead.setTextureRect(sf::IntRect(x_size* (25 + playernumx), y_size* (0 + playernumy), x_size, y_size));
 				screen = 6;
@@ -782,11 +807,11 @@ int main() {
 			arrowleft.setPosition(130.f, 260.f);
 			playerselect.setPosition(415.f, 240.f);
 			window.draw(menu6);
+			textbox1.drawTo(window);
 			window.draw(arrowleft);
 			window.draw(arrowright);
 			window.draw(playerselect);
 			window.draw(corsor);
-
 			window.display();
 		}
 
@@ -928,7 +953,19 @@ int main() {
 				if (isDraw == false) {
 					paper.setPosition(240.0f, 100.0f);
 					player_dead.setPosition(454.0f, 275.0f);
+					Name.setString(playername);
+					Name.setPosition(470, 400);
+					score = level * 100;
+					int zero = 7 - (to_string(score)).size();
+					for (int i = 0; i < zero; i++){
+						SCore += "0";
+					}
+					SCore += to_string(score);
+					Score.setString(SCore);
+					Score.setPosition(470, 440);
 					window.draw(paper);
+					window.draw(Score);
+					window.draw(Name);
 					window.draw(player_dead);
 					window.display();
 					isDraw = true;
