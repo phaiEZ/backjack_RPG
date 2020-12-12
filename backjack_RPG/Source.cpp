@@ -1,4 +1,6 @@
-﻿#include <SFML/Graphics.hpp>
+﻿
+
+#include <SFML/Graphics.hpp>
 #include <SFML/Audio.hpp>
 #include <SFML/System.hpp>
 #include <iostream>
@@ -863,7 +865,7 @@ int main() {
 				sheildnum = 0;
 				coin = 0;
 				score = 0;
-				SCore == "";
+				SCore = "";
 			}
 			Song.setVolume(VOL);
 			int row = 0;
