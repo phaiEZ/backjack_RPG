@@ -1,5 +1,5 @@
+earth 3500
 sans 750
 phai 500
+phai 300
 SA 200
-_ 0
-_ 0
