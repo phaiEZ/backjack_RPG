@@ -1,5 +1,5 @@
 ﻿
-
+#define _CRT_SECURE_NO_WARNINGS
 #include <SFML/Graphics.hpp>
 #include <SFML/Audio.hpp>
 #include <SFML/System.hpp>
@@ -15,6 +15,10 @@
 #include "enemy.h"
 #include "Textbox.h"
 #include <stdio.h>
+#include<algorithm>
+#include<utility>
+
+
 using namespace std;
 
 #define GRID_WIDTH 11
@@ -70,6 +74,13 @@ string playername = "";
 string SCore;
 int score = 0;
 std::vector <enemy> Enemyvec;
+
+vector <pair<int, string>> userScore;
+char temp[255];
+int score_sort[6];
+string name[6];
+FILE* fp;
+
 
 void ResetGrid()
 {
@@ -331,6 +342,11 @@ int winer(int a, int b) {
 		return 0;
 	}
 }
+
+
+void showHighScore(int x, int y, string word, sf::RenderWindow& window, sf::Font* font);
+
+
 int main() {
 	srand(time(NULL));
 	sf::RenderWindow window(sf::VideoMode(550 + shiftx, 550 + shifty), "Black_jack_rpg0.1", sf::Style::Close | sf::Style::Fullscreen);
@@ -646,6 +662,16 @@ int main() {
 	Score.setCharacterSize(20);
 	Score.setPosition(0, 0);
 
+	sf::Text Score_sort;
+	Score_sort.setFont(BITWONDER);
+	Score_sort.setFillColor(sf::Color::Black);
+	Score_sort.setCharacterSize(40);
+	Score_sort.setPosition(0, 0);
+
+
+
+
+
 	///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	while (window.isOpen()) {
 		window.clear();
@@ -663,6 +689,10 @@ int main() {
 				textbox1.typedOn(evnt);
 			}
 		}
+
+
+
+
 		window.setMouseCursorVisible(false);
 		if (screen == 0) {
 			window.clear();
@@ -847,6 +877,31 @@ int main() {
 				screen = 1;
 			}
 			window.draw(menu5);
+			fp = fopen("./Score.txt", "r");
+			Score_sort.setCharacterSize(45);
+			Score_sort.setString("High score");
+			Score_sort.setPosition(150,180);
+			window.draw(Score_sort);
+			Score_sort.setCharacterSize(30);
+			for (int i = 0; i < 5; i++)
+			{
+				fscanf(fp, "%s", temp);
+				name[i] = temp;
+				Score_sort.setString(name[i]);
+				Score_sort.setPosition(150, 280 + (i * 60));
+				window.draw(Score_sort);
+				//cout << name[i];
+				fscanf(fp, "%d", &score_sort[i]);
+				Score_sort.setString(to_string(score_sort[i]));
+				Score_sort.setPosition(650, 280 +(i*60));
+				window.draw(Score_sort);
+				//cout << score_sort[i];
+				userScore.push_back(make_pair(score_sort[i], name[i]));
+			}
+			fclose(fp);
+
+
+
 			window.display();
 		}
 		if (screen == 6) {
@@ -960,10 +1015,39 @@ int main() {
 							Name.setString(playername);
 							Name.setPosition(470, 400);
 							score = level * 100;
+							score += coin * 50;
 							int zero = 7 - (to_string(score)).size();
 							for (int i = 0; i < zero; i++) {
 								SCore += "0";
 							}
+
+
+
+							userScore.erase(userScore.begin(), userScore.end());
+							FILE* fp;
+							fp = fopen("./Score.txt", "r");
+							for (int i = 0; i < 5; i++)
+							{
+								fscanf(fp, "%s", temp);
+								name[i] = temp;
+								fscanf(fp, "%d", &score_sort[i]);
+								userScore.push_back(make_pair(score_sort[i], name[i]));
+							}
+							name[5] = playername;
+							score_sort[5] = score;
+							userScore.push_back(make_pair(score_sort[5], name[5]));
+							sort(userScore.begin(), userScore.end());
+							fclose(fp);
+							fp = fopen("./Score.txt", "w");
+							for (int i = 5; i >= 1; i--)
+							{
+								strcpy(temp, userScore[i].second.c_str());
+								fprintf(fp, "%s %d\n", temp, userScore[i].first);
+							}
+							fclose(fp);
+							
+
+
 							SCore += to_string(score);
 							Score.setString(SCore);
 							Score.setPosition(470, 440);
@@ -1670,4 +1754,14 @@ int main() {
 		}
 	}
 	return 0;
+}
+
+void showHighScore(int x, int y, string word, sf::RenderWindow& window, sf::Font* font)
+{
+	sf::Text text;
+	text.setFont(*font);
+	text.setPosition(x, y);
+	text.setString(word);
+	text.setCharacterSize(32);
+	window.draw(text);
 }
