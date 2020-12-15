@@ -587,7 +587,7 @@ int main() {
 	sf::Music Song;
 	Song.openFromFile("snd/The_Bards_Tale.wav");
 	Song.setVolume(VOL);
-	Song.getLoop();
+	Song.setLoop(1);
 	Song.play();
 
 	sf::SoundBuffer swoosh;
