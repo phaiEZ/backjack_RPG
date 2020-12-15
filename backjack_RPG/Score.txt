@@ -1,5 +1,5 @@
+dawd 5300
 earth 3500
 ploy 1050
+phai 1050
 sans 750
-phai 500
-phai 300
