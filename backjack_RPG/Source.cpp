@@ -669,7 +669,7 @@ int main() {
 	Score_sort.setPosition(0, 0);
 
 
-
+	sf::Mouse::setPosition(sf::Vector2i(800,600),window);
 
 
 	///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -810,7 +810,7 @@ int main() {
 			}
 			playerselect.setTextureRect(sf::IntRect(x_size * (25 + playernumx), y_size * (0 + playernumy), x_size, y_size));
 
-			if (sf::Keyboard::isKeyPressed(sf::Keyboard::Escape)) {
+			if (sf::Keyboard::isKeyPressed(sf::Keyboard::Escape)||sf::Mouse::isButtonPressed(sf::Mouse::Right)) {
 				screen = 1;
 			}
 			if (sf::Keyboard::isKeyPressed(sf::Keyboard::Enter)) {
@@ -849,7 +849,7 @@ int main() {
 
 		if (screen == 2) {
 			window.clear();
-			if (sf::Keyboard::isKeyPressed(sf::Keyboard::Escape)) {
+			if (sf::Keyboard::isKeyPressed(sf::Keyboard::Escape) || sf::Mouse::isButtonPressed(sf::Mouse::Right)) {
 				screen = 1;
 			}
 			window.draw(menu3);
@@ -857,7 +857,7 @@ int main() {
 		}
 		if (screen == 3) {
 			window.clear();
-			if (sf::Keyboard::isKeyPressed(sf::Keyboard::Escape)) {
+			if (sf::Keyboard::isKeyPressed(sf::Keyboard::Escape) || sf::Mouse::isButtonPressed(sf::Mouse::Right)) {
 				screen = 1;
 			}
 			window.draw(menu3);
@@ -865,7 +865,7 @@ int main() {
 		}
 		if (screen == 4) {
 			window.clear();
-			if (sf::Keyboard::isKeyPressed(sf::Keyboard::Escape)) {
+			if (sf::Keyboard::isKeyPressed(sf::Keyboard::Escape) || sf::Mouse::isButtonPressed(sf::Mouse::Right)) {
 				screen = 1;
 			}
 			window.draw(menu4);
@@ -873,7 +873,7 @@ int main() {
 		}
 		if (screen == 5) {
 			window.clear();
-			if (sf::Keyboard::isKeyPressed(sf::Keyboard::Escape)) {
+			if (sf::Keyboard::isKeyPressed(sf::Keyboard::Escape) || sf::Mouse::isButtonPressed(sf::Mouse::Right)) {
 				screen = 1;
 			}
 			window.draw(menu5);

@@ -1,5 +1,5 @@
 earth 3500
+ploy 1050
 sans 750
 phai 500
 phai 300
-SA 200
